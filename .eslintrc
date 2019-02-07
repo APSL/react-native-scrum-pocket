@@ -1,0 +1,67 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": ["react", "flowtype", "jsx-a11y", "import", "prettier"],
+  "globals": {
+    "Generator": true,
+    "FormData": true,
+    "navigator": true,
+    "React$ComponentType": true,
+    "window": true
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "trailingComma": "all",
+        "jsxBracketSameLine": true,
+        "printWidth": 84,
+        "semi": true,
+        "useTabs": false,
+        "tabWidth": 2
+      }
+    ],
+    "react/destructuring-assignment": 0,
+    "global-require": "off",
+    "operator-linebreak": "off",
+    "no-underscore-dangle": "off",
+    "no-use-before-define": "off",
+    "object-curly-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "react/require-default-props": "off",
+    "react/jsx-closing-bracket-location": [
+      1,
+      { "selfClosing": "tag-aligned", "nonEmpty": "after-props" }
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prefer-stateless-function": [2, { "ignorePureComponents": true }],
+    "react/forbid-prop-types": [0, { "forbid": [] }],
+    "import/extensions": [1, "never", { "svg": "always" }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "semi": ["error", "never"],
+    "react/sort-comp": [
+      2,
+      {
+        "order": [
+          "type-annotations",
+          "instance-variables",
+          "static-methods",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
+      }
+    ]
+  },
+  "env": {
+    "jest": true
+  }
+}
