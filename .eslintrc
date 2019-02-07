@@ -67,7 +67,7 @@
         "peerDependencies": false
       }
     ],
-    "semi": ["error", "never"],
+    "semi": "off",
     "react/sort-comp": [
       2,
       {
