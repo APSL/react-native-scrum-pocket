@@ -1,44 +1,88 @@
 /* @flow */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Platform,
+  Easing,
+} from 'react-native';
 
 type Props = {
   title: string,
   idx: number,
   onPress: Function,
+  style: number | Object,
+  titleStyle: number | Object,
 };
 
-const Card = (props: Props) => (
-  <TouchableOpacity onPress={() => props.onPress(props.idx)}>
-    <View style={styles.card}>
-      <Text style={styles.number}>{props.title}</Text>
-    </View>
-  </TouchableOpacity>
-);
+class Card extends React.PureComponent<Props> {
+  _rotateY = new Animated.Value(0);
+
+  componentDidMount() {
+    Animated.timing(this._rotateY, {
+      duration: 500,
+      toValue: 180,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  render() {
+    const rotateY = this._rotateY.interpolate({
+      inputRange: [0, 180],
+      outputRange: ['180deg', '0deg'],
+    });
+    const { onPress, style, titleStyle, title } = this.props;
+    return (
+      <TouchableOpacity onPress={() => onPress(title)}>
+        <Animated.View
+          style={[
+            styles.card,
+            style,
+            {
+              transform: [
+                {
+                  rotateY,
+                },
+              ],
+            },
+          ]}>
+          <Text style={[styles.number, titleStyle]}>{title}</Text>
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   card: {
     margin: 20,
-    width: 73,
+    width: 75,
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#87CEEB',
-    borderRadius: 10,
+    backgroundColor: '#00BFFF',
+    borderRadius: 15,
     borderWidth: 3,
     borderColor: 'white',
   },
   number: {
-    fontSize: 25,
-    fontFamily: 'Avenir-Heavy',
+    fontSize: 30,
+    fontFamily: Platform.select({
+      ios: 'Avenir-Heavy',
+      android: 'Roboto',
+    }),
     color: 'white',
     shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 5,
+      height: 3,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.4,
     shadowRadius: 3.84,
     elevation: 5,
   },
