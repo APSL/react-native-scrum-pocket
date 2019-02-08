@@ -1,11 +1,13 @@
 /* @flow */
 
-const Deck: {
+export type DeckType = {
   Standard: Array<string>,
   TShirt: Array<string>,
   Fibonacci: Array<string>,
   RiskPlanning: Array<string>,
-} = {
+};
+
+const Deck: DeckType = {
   Standard: [
     '0',
     '1/2',
@@ -40,7 +42,16 @@ const Deck: {
     '?',
     '☕',
   ],
-  RiskPlanning: [],
+  RiskPlanning: [
+    '#9ACD32',
+    '#FFFF00',
+    '#FFA500',
+    '#800080',
+    '#FF4500',
+    '∞',
+    '?',
+    '☕',
+  ],
 };
 
 export { Deck };

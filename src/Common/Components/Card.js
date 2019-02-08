@@ -39,20 +39,37 @@ class Card extends React.PureComponent<Props> {
     const { onPress, style, titleStyle, title } = this.props;
     return (
       <TouchableOpacity onPress={() => onPress(title)}>
-        <Animated.View
-          style={[
-            styles.card,
-            style,
-            {
-              transform: [
-                {
-                  rotateY,
-                },
-              ],
-            },
-          ]}>
-          <Text style={[styles.number, titleStyle]}>{title}</Text>
-        </Animated.View>
+        {title.startsWith('#') ? (
+          <Animated.View
+            style={[
+              styles.card,
+              style,
+              {
+                backgroundColor: title,
+                transform: [
+                  {
+                    rotateY,
+                  },
+                ],
+              },
+            ]}
+          />
+        ) : (
+          <Animated.View
+            style={[
+              styles.card,
+              style,
+              {
+                transform: [
+                  {
+                    rotateY,
+                  },
+                ],
+              },
+            ]}>
+            <Text style={[styles.number, titleStyle]}>{title}</Text>
+          </Animated.View>
+        )}
       </TouchableOpacity>
     );
   }
@@ -60,15 +77,15 @@ class Card extends React.PureComponent<Props> {
 
 const styles = StyleSheet.create({
   card: {
-    margin: 20,
-    width: 75,
+    margin: 10,
+    width: 85,
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#00BFFF',
     borderRadius: 15,
     borderWidth: 3,
-    borderColor: 'white',
+    borderColor: '#FFFFFF',
   },
   number: {
     fontSize: 30,
@@ -76,7 +93,7 @@ const styles = StyleSheet.create({
       ios: 'Avenir-Heavy',
       android: 'Roboto',
     }),
-    color: 'white',
+    color: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: {
       width: 5,

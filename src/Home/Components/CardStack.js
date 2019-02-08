@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  View,
   FlatList,
   StyleSheet,
   StatusBar,
@@ -13,13 +14,18 @@ import {
 import { Deck } from '../../Utils/DeckTypes';
 import Card from '../../Common/Components/Card';
 
+import type { DeckType } from '../../Utils/DeckTypes';
+
+type Props = {
+  deck: DeckType,
+};
 type State = {
   isHidden: boolean,
   zIndex: number,
   card: string,
 };
 
-class CardStack extends React.PureComponent<*, State> {
+class CardStack extends React.PureComponent<Props, State> {
   _rotateY = new Animated.Value(0);
 
   _opacity = new Animated.Value(1);
@@ -83,7 +89,7 @@ class CardStack extends React.PureComponent<*, State> {
       outputRange: ['180deg', '360deg'],
     });
     return (
-      <>
+      <View style={{ alignItems: 'center' }}>
         <Animated.View
           style={[
             styles.container,
@@ -103,8 +109,9 @@ class CardStack extends React.PureComponent<*, State> {
             }}
             style={{
               width: width - 100,
-              height: 300,
+              height: 340,
               margin: 0,
+              borderWidth: 5,
             }}
           />
         </Animated.View>
@@ -121,24 +128,32 @@ class CardStack extends React.PureComponent<*, State> {
               ],
             },
           ]}
+          contentContainerStyle={styles.contentContainerStyle}
           numColumns={3}
           scrollEnabled={false}
-          data={Deck.TShirt}
+          data={this.props.deck}
           keyExtractor={this._getKeyExtractor}
           renderItem={this._renderItem}
         />
-      </>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
     backfaceVisibility: 'hidden',
   },
   items: {
     backfaceVisibility: 'hidden',
+  },
+  contentContainerStyle: {
+    justifyContent: 'center',
   },
 });
 
