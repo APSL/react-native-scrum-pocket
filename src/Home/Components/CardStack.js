@@ -17,7 +17,7 @@ import Card from '../../Common/Components/Card';
 import type { DeckType } from '../../Utils/DeckTypes';
 
 type Props = {
-  deck: DeckType,
+  deck: Array<string>,
 };
 type State = {
   isHidden: boolean,
@@ -67,12 +67,15 @@ class CardStack extends React.PureComponent<Props, State> {
         zIndex: prev.isHidden ? 1 : -1,
         card,
       }),
-      () => this.rotate(),
+      () => {
+        this.rotate();
+        this.props.onPressCard(this.state.card);
+      },
     );
   };
 
   _renderItem = (item: { item: string, idx: number }) => (
-    <Card title={item.item} onPress={this._onPressCard} idx={item.idx} />
+    <Card title={item.item} onPress={this._onPressCard} />
   );
 
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
@@ -80,23 +83,18 @@ class CardStack extends React.PureComponent<Props, State> {
   render() {
     const { width, height } = Dimensions.get('window');
     const { card, zIndex } = this.state;
-    const front = this._rotateY.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    });
-    const back = this._rotateY.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '360deg'],
-    });
     return (
-      <View style={{ alignItems: 'center' }}>
+      <View style={styles.top}>
         <Animated.View
           style={[
             styles.container,
             {
               transform: [
                 {
-                  rotateY: back,
+                  rotateY: this._rotateY.interpolate({
+                    inputRange: [0, 180],
+                    outputRange: ['180deg', '360deg'],
+                  }),
                 },
               ],
             },
@@ -108,10 +106,10 @@ class CardStack extends React.PureComponent<Props, State> {
               fontSize: 120,
             }}
             style={{
-              width: width - 100,
+              width: width - 80,
               height: 340,
               margin: 0,
-              borderWidth: 5,
+              borderWidth: 4,
             }}
           />
         </Animated.View>
@@ -121,16 +119,10 @@ class CardStack extends React.PureComponent<Props, State> {
             {
               zIndex,
               opacity: this._opacity,
-              transform: [
-                {
-                  rotateY: front,
-                },
-              ],
             },
           ]}
           contentContainerStyle={styles.contentContainerStyle}
           numColumns={3}
-          scrollEnabled={false}
           data={this.props.deck}
           keyExtractor={this._getKeyExtractor}
           renderItem={this._renderItem}
@@ -141,6 +133,10 @@ class CardStack extends React.PureComponent<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  top: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   container: {
     width: '100%',
     height: '100%',
@@ -153,7 +149,7 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
   },
   contentContainerStyle: {
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
 });
 

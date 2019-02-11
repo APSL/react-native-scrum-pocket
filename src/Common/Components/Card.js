@@ -5,18 +5,20 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Animated,
   Platform,
   Easing,
+  TouchableOpacity,
 } from 'react-native';
+import { TouchableRipple, Colors } from 'react-native-paper';
+
+const AnimatedTouchableRipple = Animated.createAnimatedComponent(TouchableRipple);
 
 type Props = {
   title: string,
-  idx: number,
   onPress: Function,
-  style: number | Object,
-  titleStyle: number | Object,
+  style?: Object,
+  titleStyle?: Object,
 };
 
 class Card extends React.PureComponent<Props> {
@@ -24,53 +26,47 @@ class Card extends React.PureComponent<Props> {
 
   componentDidMount() {
     Animated.timing(this._rotateY, {
-      duration: 500,
+      duration: Math.round(Math.random() * 700),
       toValue: 180,
       easing: Easing.linear,
       useNativeDriver: true,
     }).start();
   }
 
+  _onPress = () => {
+    this.props.onPress(this.props.title);
+  };
+
   render() {
-    const rotateY = this._rotateY.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '0deg'],
-    });
-    const { onPress, style, titleStyle, title } = this.props;
+    const { style, titleStyle, title } = this.props;
     return (
-      <TouchableOpacity onPress={() => onPress(title)}>
-        {title.startsWith('#') ? (
-          <Animated.View
-            style={[
-              styles.card,
-              style,
+      <AnimatedTouchableRipple
+        underlayColor={Colors.yellow500}
+        onPress={this._onPress}
+        borderless
+        style={[
+          styles.card,
+          style,
+          title.startsWith('#') && {
+            backgroundColor: title,
+          },
+          {
+            transform: [
               {
-                backgroundColor: title,
-                transform: [
-                  {
-                    rotateY,
-                  },
-                ],
+                rotateY: this._rotateY.interpolate({
+                  inputRange: [0, 180],
+                  outputRange: ['180deg', '0deg'],
+                }),
               },
-            ]}
-          />
-        ) : (
-          <Animated.View
-            style={[
-              styles.card,
-              style,
-              {
-                transform: [
-                  {
-                    rotateY,
-                  },
-                ],
-              },
-            ]}>
+            ],
+          },
+        ]}>
+        <>
+          {!title.startsWith('#') && (
             <Text style={[styles.number, titleStyle]}>{title}</Text>
-          </Animated.View>
-        )}
-      </TouchableOpacity>
+          )}
+        </>
+      </AnimatedTouchableRipple>
     );
   }
 }
@@ -82,10 +78,10 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00BFFF',
+    backgroundColor: Colors.yellow600,
     borderRadius: 15,
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: Colors.white,
   },
   number: {
     fontSize: 30,
@@ -93,15 +89,13 @@ const styles = StyleSheet.create({
       ios: 'Avenir-Heavy',
       android: 'Roboto',
     }),
-    color: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 5,
-      height: 3,
+    color: Colors.white,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {
+      width: 1,
+      height: 1,
     },
-    shadowOpacity: 0.4,
-    shadowRadius: 3.84,
-    elevation: 5,
+    textShadowRadius: 5,
   },
 });
 
