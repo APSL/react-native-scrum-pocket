@@ -1,16 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import {
-  Text,
-  View,
-  Animated,
-  StyleSheet,
-  Dimensions,
-  NativeEventEmitter,
-  Easing,
-} from 'react-native';
-import { Colors, TouchableRipple } from 'react-native-paper';
+import { Animated, Dimensions, NativeEventEmitter, Easing } from 'react-native';
 import Header from './Header';
 
 type Props = {
@@ -54,19 +45,20 @@ class Slider extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    Animated.timing(this._rotateY, {
-      duration: 500,
-      toValue: this.getValue(),
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start();
     Animated.sequence([
-      Animated.timing(this._color, {
+      Animated.timing(this._rotateY, {
         duration: 500,
+        delay: 200,
+        toValue: this.getValue(),
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }),
+      Animated.timing(this._color, {
+        duration: 250,
         toValue: 1,
       }),
       Animated.timing(this._color, {
-        duration: 500,
+        duration: 200,
         toValue: 0,
       }),
     ]).start();
@@ -75,9 +67,7 @@ class Slider extends React.PureComponent<Props, State> {
   _onScroll = (e: NativeEventEmitter) => {
     this._xOffset = e.nativeEvent.contentOffset.x;
     this.setState({
-      page: Math.round(
-        e.nativeEvent.contentOffset.x / Dimensions.get('window').width,
-      ),
+      page: Math.round(e.nativeEvent.contentOffset.x / this.state.width),
     });
   };
 
@@ -99,8 +89,7 @@ class Slider extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { width } = Dimensions.get('window');
-    const start = this.state.page * width;
+    const start = this.state.page * this.state.width;
     return (
       <>
         <Header

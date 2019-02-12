@@ -1,16 +1,9 @@
 /* @flow */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Platform,
-  Easing,
-  TouchableOpacity,
-} from 'react-native';
-import { TouchableRipple, Colors } from 'react-native-paper';
+import { View, Text, StyleSheet, Animated, Platform, Easing } from 'react-native';
+import { TouchableRipple } from 'react-native-paper';
+import Colors from '../Colors';
 
 const AnimatedTouchableRipple = Animated.createAnimatedComponent(TouchableRipple);
 
@@ -41,9 +34,9 @@ class Card extends React.PureComponent<Props> {
     const { style, titleStyle, title } = this.props;
     return (
       <AnimatedTouchableRipple
-        underlayColor={Colors.yellow500}
         onPress={this._onPress}
         borderless
+        underlayColor={Colors.SemiYellow600}
         style={[
           styles.card,
           style,
@@ -78,10 +71,9 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.yellow600,
-    borderRadius: 15,
+    backgroundColor: Colors.Yellow600,
     borderWidth: 2,
-    borderColor: Colors.white,
+    borderColor: Colors.White,
   },
   number: {
     fontSize: 30,
@@ -89,8 +81,8 @@ const styles = StyleSheet.create({
       ios: 'Avenir-Heavy',
       android: 'Roboto',
     }),
-    color: Colors.white,
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    color: Colors.White,
+    textShadowColor: Colors.Black75,
     textShadowOffset: {
       width: 1,
       height: 1,

@@ -1,14 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {
-  Animated,
-  View,
-  StyleSheet,
-  StatusBar,
-  SegmentedControlIOS,
-  Platform,
-} from 'react-native';
+import { Animated, StatusBar } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SafeView from './src/Common/Components/SafeView';
 import Card from './src/Common/Components/Card';

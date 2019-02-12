@@ -1,11 +1,13 @@
 /* @flow */
 
 import React from 'react';
-import { View, Animated, StyleSheet, Dimensions } from 'react-native';
-import { TouchableRipple, Colors } from 'react-native-paper';
+import { View, Animated, StyleSheet, Dimensions, PixelRatio } from 'react-native';
+import { TouchableRipple } from 'react-native-paper';
+import Colors from '../Colors';
 
 type Props = {
   animated: Animated.Value,
+  color: Animated.Value,
   pages: Array<string>,
   page: number,
   disabled: boolean,
@@ -18,22 +20,18 @@ const Header = (props: Props) => {
   return (
     <Animated.View
       style={{
-        backfaceVisibility: 'hidden',
         transform: [
           {
-            rotateX: props.animated.interpolate({
+            translateY: props.animated.interpolate({
               inputRange: [0, 180],
-              outputRange: ['0deg', '180deg'],
+              outputRange: [0, -80],
             }),
           },
         ],
       }}>
       <View style={styles.container}>
         {props.pages.map((page: string, idx: number) => (
-          <TouchableRipple
-            key={`Page: ${page}`}
-            disabled={props.disabled}
-            onPress={() => props.onPress(idx)}>
+          <TouchableRipple key={`Page: ${page}`} onPress={() => props.onPress(idx)}>
             <Animated.Text
               style={[
                 styles.title,
@@ -42,10 +40,10 @@ const Header = (props: Props) => {
                     idx === props.page
                       ? props.color.interpolate({
                           inputRange: [0, 1],
-                          outputRange: [Colors.white, Colors.grey500],
+                          outputRange: [Colors.White, Colors.Grey500],
                           extrapolate: 'clamp',
                         })
-                      : Colors.grey500,
+                      : Colors.Grey500,
                   fontWeight: idx === props.page ? '900' : 'normal',
                 },
               ]}>
@@ -60,10 +58,12 @@ const Header = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 64,
+    height: 56,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    borderBottomColor: Colors.Grey500,
+    borderBottomWidth: 1 / PixelRatio.get(),
   },
   title: {
     fontFamily: 'AvenirNextCondensed-Regular',

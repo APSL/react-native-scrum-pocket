@@ -18,6 +18,7 @@ import type { DeckType } from '../../Utils/DeckTypes';
 
 type Props = {
   deck: Array<string>,
+  onPressCard: (card: string) => void,
 };
 type State = {
   isHidden: boolean,
@@ -46,13 +47,15 @@ class CardStack extends React.PureComponent<Props, State> {
   rotate() {
     Animated.parallel([
       Animated.timing(this._opacity, {
-        duration: 500,
+        duration: 250,
+        delay: 500,
         toValue: this.state.isHidden ? 0 : 1,
         easing: Easing.linear,
         useNativeDriver: true,
       }),
       Animated.timing(this._rotateY, {
-        duration: 500,
+        duration: 750,
+        delay: 250,
         toValue: this.getValue(),
         easing: Easing.ease,
         useNativeDriver: true,

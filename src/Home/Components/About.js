@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Colors from '../../Common/Colors';
 
+// TODO: Fill section with proper details
 const About = () => (
   <View style={styles.container}>
     <Text style={styles.text}>
@@ -32,11 +34,12 @@ const About = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingHorizontal: 10,
     paddingBottom: 20,
   },
   text: {
-    color: 'white',
+    color: Colors.White,
   },
 });
 
