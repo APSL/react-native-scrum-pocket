@@ -1,20 +1,8 @@
 /* @flow */
 
 import React from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Dimensions,
-  Animated,
-  Easing,
-} from 'react-native';
-import { Deck } from '../../Utils/DeckTypes';
+import { View, StyleSheet, Dimensions, Animated, Easing } from 'react-native';
 import Card from '../../Common/Components/Card';
-
-import type { DeckType } from '../../Utils/DeckTypes';
 
 type Props = {
   deck: Array<string>,
@@ -37,31 +25,29 @@ class CardStack extends React.PureComponent<Props, State> {
     card: '',
   };
 
-  getValue(): number {
+  _getValue = (): number => {
     if (this.state.isHidden) {
       return 180;
     }
     return 0;
-  }
+  };
 
-  rotate() {
+  _rotate = () => {
     Animated.parallel([
       Animated.timing(this._opacity, {
-        duration: 250,
-        delay: 500,
+        duration: 350,
         toValue: this.state.isHidden ? 0 : 1,
         easing: Easing.linear,
         useNativeDriver: true,
       }),
       Animated.timing(this._rotateY, {
-        duration: 750,
-        delay: 250,
-        toValue: this.getValue(),
+        duration: 350,
+        toValue: this._getValue(),
         easing: Easing.ease,
         useNativeDriver: true,
       }),
     ]).start();
-  }
+  };
 
   _onPressCard = (card: string) => {
     this.setState(
@@ -71,7 +57,7 @@ class CardStack extends React.PureComponent<Props, State> {
         card,
       }),
       () => {
-        this.rotate();
+        this._rotate();
         this.props.onPressCard(this.state.card);
       },
     );
@@ -84,7 +70,7 @@ class CardStack extends React.PureComponent<Props, State> {
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
 
   render() {
-    const { width, height } = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
     const { card, zIndex } = this.state;
     return (
       <View style={styles.top}>

@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { View, Text, StyleSheet, Animated, Platform, Easing } from 'react-native';
+import { Text, StyleSheet, Animated, Platform, Easing } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import Colors from '../Colors';
 

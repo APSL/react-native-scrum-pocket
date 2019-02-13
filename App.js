@@ -4,14 +4,11 @@ import React from 'react';
 import { Animated, StatusBar } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SafeView from './src/Common/Components/SafeView';
-import Card from './src/Common/Components/Card';
 import CardStack from './src/Home/Components/CardStack';
-import { Deck } from './src/Utils/DeckTypes';
+import Deck from './src/Utils/DeckTypes';
 import Slider from './src/Common/Components/Slider';
 import SliderItem from './src/Common/Components/SliderItem';
 import About from './src/Home/Components/About';
-
-import type { DeckType } from './src/Utils/DeckTypes';
 
 type State = {
   hidden: boolean,
@@ -22,7 +19,7 @@ class HomeScreen extends React.PureComponent<*, State> {
     hidden: false,
   };
 
-  _onPressCard = (card: string) => {
+  _onPressCard = () => {
     this.setState((prev: State) => ({
       hidden: !prev.hidden,
     }));

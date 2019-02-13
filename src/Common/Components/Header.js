@@ -6,23 +6,20 @@ import { TouchableRipple } from 'react-native-paper';
 import Colors from '../Colors';
 
 type Props = {
-  animated: Animated.Value,
-  color: Animated.Value,
+  hiddenAnimation: Animated.Value,
+  scroll: Animated.Value,
   pages: Array<string>,
-  page: number,
-  disabled: boolean,
   onPress: Function,
 };
 
 const Header = (props: Props) => {
   const { width } = Dimensions.get('window');
-  const start = props.page * width;
   return (
     <Animated.View
       style={{
         transform: [
           {
-            translateY: props.animated.interpolate({
+            translateY: props.hiddenAnimation.interpolate({
               inputRange: [0, 180],
               outputRange: [0, -80],
             }),
@@ -30,27 +27,41 @@ const Header = (props: Props) => {
         ],
       }}>
       <View style={styles.container}>
-        {props.pages.map((page: string, idx: number) => (
-          <TouchableRipple key={`Page: ${page}`} onPress={() => props.onPress(idx)}>
-            <Animated.Text
-              style={[
-                styles.title,
-                {
-                  color:
-                    idx === props.page
-                      ? props.color.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [Colors.White, Colors.Grey500],
-                          extrapolate: 'clamp',
-                        })
-                      : Colors.Grey500,
-                  fontWeight: idx === props.page ? '900' : 'normal',
-                },
-              ]}>
-              {page}
-            </Animated.Text>
-          </TouchableRipple>
-        ))}
+        {props.pages.map((page: string, idx: number) => {
+          const start = idx * width;
+          const color = props.scroll.interpolate({
+            inputRange: [start - width, start, start + width],
+            outputRange: [Colors.Grey500, Colors.White, Colors.Grey500],
+            extrapolate: 'clamp',
+          });
+          const scale = props.scroll.interpolate({
+            inputRange: [start - width, start, start + width],
+            outputRange: [1.0, 1.2, 1.0],
+            extrapolate: 'clamp',
+          });
+          const translateY = props.scroll.interpolate({
+            inputRange: [start - width, start, start + width],
+            outputRange: [0.0, 0.5, 0.0],
+            extrapolate: 'clamp',
+          });
+          return (
+            <TouchableRipple
+              key={`page-${page}`}
+              onPress={() => props.onPress(idx)}>
+              <Animated.Text
+                style={[
+                  styles.title,
+                  {
+                    color,
+                    transform: [{ scale }, { translateY }],
+                    fontWeight: '600',
+                  },
+                ]}>
+                {page}
+              </Animated.Text>
+            </TouchableRipple>
+          );
+        })}
       </View>
     </Animated.View>
   );

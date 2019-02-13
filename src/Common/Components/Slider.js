@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { Animated, Dimensions, NativeEventEmitter, Easing } from 'react-native';
+import { Animated, NativeEventEmitter, Easing } from 'react-native';
 import Header from './Header';
 
 type Props = {
@@ -22,9 +22,7 @@ class Slider extends React.PureComponent<Props, State> {
 
   _animated = new Animated.Value(0);
 
-  _rotateY = new Animated.Value(0);
-
-  _color = new Animated.Value(0);
+  _toggleHeader = new Animated.Value(0);
 
   state = {
     page: this.props.initialPage,
@@ -37,6 +35,16 @@ class Slider extends React.PureComponent<Props, State> {
     this._xOffset = 0;
   }
 
+  componentDidUpdate() {
+    Animated.spring(this._toggleHeader, {
+      duration: 500,
+      delay: 200,
+      toValue: this.getValue(),
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start();
+  }
+
   getValue(): number {
     if (this.props.hidden) {
       return 180;
@@ -44,38 +52,18 @@ class Slider extends React.PureComponent<Props, State> {
     return 0;
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    Animated.sequence([
-      Animated.timing(this._rotateY, {
-        duration: 500,
-        delay: 200,
-        toValue: this.getValue(),
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-      Animated.timing(this._color, {
-        duration: 250,
-        toValue: 1,
-      }),
-      Animated.timing(this._color, {
-        duration: 200,
-        toValue: 0,
-      }),
-    ]).start();
-  }
-
   _onScroll = (e: NativeEventEmitter) => {
     this._xOffset = e.nativeEvent.contentOffset.x;
-    this.setState({
-      page: Math.round(e.nativeEvent.contentOffset.x / this.state.width),
-    });
+    this.setState(state => ({
+      page: Math.round(this._xOffset / state.width),
+    }));
   };
 
   /**
    * Set the page dimensions
    * @param e
    */
-  setDimensions = (e: NativeEventEmitter) => {
+  _setDimensions = (e: NativeEventEmitter) => {
     this.setState({
       width: e.nativeEvent.layout.width,
     });
@@ -89,20 +77,17 @@ class Slider extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const start = this.state.page * this.state.width;
     return (
       <>
         <Header
-          disabled={this.props.hidden}
+          hiddenAnimation={this._toggleHeader}
+          scroll={this._animated}
           pages={this.props.pages}
-          animated={this._rotateY}
-          page={this.state.page}
           onPress={this._onPressPage}
-          color={this._color}
         />
         <Animated.ScrollView
           ref={this._scrollView}
-          onLayout={this.setDimensions}
+          onLayout={this._setDimensions}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -119,7 +104,6 @@ class Slider extends React.PureComponent<Props, State> {
               },
             ],
             {
-              useNativeDriver: true,
               listener: this._onScroll,
             },
           )}

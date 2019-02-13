@@ -54,4 +54,4 @@ const Deck: DeckType = {
   ],
 };
 
-export { Deck };
+export default Deck;
