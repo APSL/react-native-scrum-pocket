@@ -1,46 +1,112 @@
 /* @flow */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Animated,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Easing,
+  Linking,
+} from 'react-native';
+import { Button } from 'react-native-paper';
 import Colors from '../../Common/Colors';
 
-// TODO: Fill section with proper details
-const About = () => (
-  <View style={styles.container}>
-    <Text style={styles.text}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean mattis lacinia
-      justo ut porttitor. Vestibulum dictum est id lorem consequat, sit amet maximus
-      dolor commodo. Vivamus ornare dolor et tortor euismod, eu venenatis mauris
-      bibendum. Phasellus venenatis, nulla eget faucibus dignissim, metus ante
-      elementum magna, et condimentum urna ligula vitae nulla. Etiam cursus
-      imperdiet urna, vel pretium velit tempus nec. Suspendisse varius maximus sem,
-      eu tristique massa lacinia id. Suspendisse finibus porta nibh maximus
-      ultricies. Fusce et velit in lorem lobortis scelerisque sit amet sed velit. In
-      semper turpis magna, eget tempus quam placerat eget. Nulla in rhoncus tellus,
-      ac vehicula lectus. Aliquam quis purus sed mauris fermentum vulputate. Aliquam
-      massa metus, tincidunt vitae mauris at, volutpat blandit tellus. Proin sed
-      nibh eu urna placerat egestas. Morbi ullamcorper cursus tortor, vitae
-      malesuada elit consequat lobortis. Curabitur vitae commodo mauris, in
-      convallis enim. Cras hendrerit diam ut enim volutpat, mattis pulvinar justo
-      mollis. In dapibus, arcu nec sollicitudin eleifend, lacus enim bibendum nunc,
-      sit amet blandit felis nisl a magna. Aliquam in molestie eros, convallis
-      cursus urna. Praesent imperdiet lacinia arcu et pulvinar. Duis quis volutpat
-      leo, ac aliquet dui. Sed et sagittis elit. Cras vestibulum nisi nisl, sit amet
-      tincidunt turpis efficitur a.
-    </Text>
-  </View>
-);
+const apslLogo = require('./img/logo.png');
+
+class About extends React.PureComponent {
+  _scroll = new Animated.Value(0);
+
+  _openSite = async () => {
+    const apslURL = 'https://www.apsl.net';
+    const canOpenURL = await Linking.canOpenURL(apslURL);
+    if (canOpenURL) {
+      Linking.openURL(apslURL);
+    }
+  };
+
+  render() {
+    return (
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        scrollEventThrottle={12}
+        onScroll={Animated.event([
+          { nativeEvent: { contentOffset: { y: this._scroll } } },
+        ])}>
+        <Animated.Image
+          source={apslLogo}
+          style={[
+            styles.logo,
+            {
+              width: Dimensions.get('window').width * 0.5,
+              height: Dimensions.get('window').width * 0.5,
+              transform: [
+                {
+                  rotateZ: this._scroll.interpolate({
+                    inputRange: [-100, 0, 100],
+                    outputRange: ['-15deg', '0deg', '15deg'],
+                    extrapolate: 'clamp',
+                    easing: Easing.ease,
+                  }),
+                },
+                {
+                  scale: this._scroll.interpolate({
+                    inputRange: [-100, 0, 100],
+                    outputRange: [1.2, 1.0, 1.2],
+                    extrapolate: 'clamp',
+                    easing: Easing.elastic(1.0),
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>
+            Made with ❤️ by the Mobile Team at APSL.net with <Text style={styles.mono}>React Native</Text>,{' '}
+            <Text style={styles.mono}>react-native-paper</Text>, <Text style={styles.mono}>react-navigation</Text> and <Text style={styles.mono}>react-native-vector-icons</Text>.
+          </Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Button
+            mode="contained"
+            dark
+            color={Colors.Yellow600}
+            onPress={this._openSite}>
+            Get in touch
+          </Button>
+        </View>
+      </ScrollView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingBottom: 20,
+  },
+  contentContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    padding: 20,
+  },
+  textContainer: {
+    paddingVertical: 20,
   },
   text: {
     color: Colors.White,
+    textAlign: 'center',
   },
+  mono: {
+    fontWeight: '700'
+  }
 });
 
 export default About;
