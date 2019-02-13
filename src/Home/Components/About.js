@@ -16,7 +16,7 @@ import Colors from '../../Common/Colors';
 
 const apslLogo = require('./img/logo.png');
 
-class About extends React.PureComponent {
+class About extends React.PureComponent<{}> {
   _scroll = new Animated.Value(0);
 
   _openSite = async () => {
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   mono: {
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
 });
 
 export default About;
