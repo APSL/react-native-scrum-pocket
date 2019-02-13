@@ -29,28 +29,28 @@ class HomeScreen extends React.PureComponent<*, State> {
       <SafeView>
         <StatusBar barStyle="light-content" />
         <Slider
-          pages={['About', 'Standard', 'T-Shirt', 'Fibonacci', 'Risk Planning']}
+          pages={['Standard', 'T-Shirt', 'Fibonacci', 'Risk Planning', 'About']}
           hidden={this.state.hidden}
-          initialPage={1}
+          initialPage={0}
           items={(page: number, animated: Animated.Value) => (
             <>
               <SliderItem animated={animated} itemPage={0} page={page}>
-                <About />
-              </SliderItem>
-              <SliderItem animated={animated} itemPage={1} page={page}>
                 <CardStack deck={Deck.Standard} onPressCard={this._onPressCard} />
               </SliderItem>
-              <SliderItem animated={animated} itemPage={2} page={page}>
+              <SliderItem animated={animated} itemPage={1} page={page}>
                 <CardStack deck={Deck.TShirt} onPressCard={this._onPressCard} />
               </SliderItem>
-              <SliderItem animated={animated} itemPage={3} page={page}>
+              <SliderItem animated={animated} itemPage={2} page={page}>
                 <CardStack deck={Deck.Fibonacci} onPressCard={this._onPressCard} />
               </SliderItem>
-              <SliderItem animated={animated} itemPage={4} page={page}>
+              <SliderItem animated={animated} itemPage={3} page={page}>
                 <CardStack
                   deck={Deck.RiskPlanning}
                   onPressCard={this._onPressCard}
                 />
+              </SliderItem>
+              <SliderItem animated={animated} itemPage={4} page={page}>
+                <About />
               </SliderItem>
             </>
           )}
