@@ -5,7 +5,7 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 
 type Props = {
   children: *,
-  style?: Object | number,
+  style?: Object,
 };
 
 const SafeView = (props: Props) => (
