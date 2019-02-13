@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Animated, StatusBar } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
 import SafeView from './src/Common/Components/SafeView';
 import CardStack from './src/Home/Components/CardStack';
 import Deck from './src/Utils/DeckTypes';
@@ -61,13 +60,4 @@ class HomeScreen extends React.PureComponent<*, State> {
   }
 }
 
-export default createAppContainer(
-  createStackNavigator(
-    {
-      Standard: HomeScreen,
-    },
-    {
-      headerMode: 'none',
-    },
-  ),
-);
+export default HomeScreen;
