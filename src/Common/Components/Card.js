@@ -35,7 +35,6 @@ class Card extends React.PureComponent<Props> {
     return (
       <AnimatedTouchableRipple
         onPress={this._onPress}
-        borderless
         underlayColor={Colors.SemiYellow600}
         style={[
           styles.card,
