@@ -50,7 +50,6 @@
 		836B1157373D4DD296AC8083 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF515C05B0FD4D0BAB847B03 /* Foundation.ttf */; };
 		8F6745755AAA46288B41908F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A45243F8C316433E8010A990 /* SimpleLineIcons.ttf */; };
 		9265CE4634354FA49381857F /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3A2D4C9BBEF451BBD66A030 /* AntDesign.ttf */; };
-		A591AA4BACE04603B72C47FF /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6A35CB76D44A88DC22F35 /* libRNReanimated.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B62C1055049F4802B7B79376 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 296B498A461B45A6A6CB5DD3 /* Ionicons.ttf */; };
 		E24752877D814A70831C16BF /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85DE0D90BF5447D1BCAA26E1 /* MaterialIcons.ttf */; };
@@ -236,13 +235,6 @@
 			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
 			remoteInfo = "RNVectorIcons-tvOS";
 		};
-		3C376EF4220C55D3003DC5AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 87CC95883EC1477E825F8141 /* RNReanimated.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNReanimated;
-		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
@@ -388,7 +380,6 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		85DE0D90BF5447D1BCAA26E1 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		87CC95883EC1477E825F8141 /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNReanimated.xcodeproj; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; };
 		8BBF2E2FCD41424DB20D6080 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		941550514E074037A7761C8B /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		A45243F8C316433E8010A990 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -435,7 +426,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				82F0C74B7A2E4F27ACD3A8A6 /* libRNVectorIcons.a in Frameworks */,
-				A591AA4BACE04603B72C47FF /* libRNReanimated.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,14 +624,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3C376EF1220C55D3003DC5AB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3C376EF5220C55D3003DC5AB /* libRNReanimated.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,7 +658,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				B8140A3E5B25457096A53B80 /* RNVectorIcons.xcodeproj */,
-				87CC95883EC1477E825F8141 /* RNReanimated.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -816,6 +797,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 5RY4T725CY;
 						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -888,10 +870,6 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-				},
-				{
-					ProductGroup = 3C376EF1220C55D3003DC5AB /* Products */;
-					ProjectRef = 87CC95883EC1477E825F8141 /* RNReanimated.xcodeproj */;
 				},
 				{
 					ProductGroup = 3C376E7A220C351F003DC5AB /* Products */;
@@ -1068,13 +1046,6 @@
 			fileType = archive.ar;
 			path = "libRNVectorIcons-tvOS.a";
 			remoteRef = 3C376E80220C351F003DC5AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3C376EF5220C55D3003DC5AB /* libRNReanimated.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNReanimated.a;
-			remoteRef = 3C376EF4220C55D3003DC5AB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {
@@ -1391,7 +1362,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -1410,7 +1380,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.apsl.scrumpocket;
 				PRODUCT_NAME = ScrumPocket;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ScrumPocket Dev";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1419,7 +1389,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1437,7 +1407,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.apsl.scrumpocket;
 				PRODUCT_NAME = ScrumPocket;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ScrumPocket Prod";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
