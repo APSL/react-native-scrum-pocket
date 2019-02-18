@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
+import Colors from '../Colors';
 
 type Props = {
   children: *,
@@ -17,7 +18,7 @@ const SafeView = (props: Props) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: Colors.Black100,
   },
 });
 

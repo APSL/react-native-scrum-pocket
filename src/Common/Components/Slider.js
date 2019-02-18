@@ -72,7 +72,7 @@ class Slider extends React.PureComponent<Props, State> {
   _onPressPage = (idx: number) => {
     this._scrollView.current.getNode().scrollTo({
       x: idx * this.state.width,
-      animated: true,
+      animated: false,
     });
   };
 

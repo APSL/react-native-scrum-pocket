@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { View, StyleSheet, Dimensions, Animated, Easing } from 'react-native';
+import { StyleSheet, Dimensions, Animated, Easing } from 'react-native';
 import Card from '../../Common/Components/Card';
 
 type Props = {
@@ -73,7 +73,7 @@ class CardStack extends React.PureComponent<Props, State> {
     const { width } = Dimensions.get('window');
     const { card, zIndex } = this.state;
     return (
-      <View style={styles.top}>
+      <>
         <Animated.View
           style={[
             styles.container,
@@ -104,7 +104,6 @@ class CardStack extends React.PureComponent<Props, State> {
         </Animated.View>
         <Animated.FlatList
           style={[
-            styles.items,
             {
               zIndex,
               opacity: this._opacity,
@@ -116,25 +115,18 @@ class CardStack extends React.PureComponent<Props, State> {
           keyExtractor={this._getKeyExtractor}
           renderItem={this._renderItem}
         />
-      </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  top: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   container: {
     width: '100%',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    backfaceVisibility: 'hidden',
-  },
-  items: {
     backfaceVisibility: 'hidden',
   },
   contentContainerStyle: {
