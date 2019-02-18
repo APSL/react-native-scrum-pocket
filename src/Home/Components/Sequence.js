@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { View, FlatList, Alert, SwipeableFlatList } from 'react-native';
+import { View, Alert, FlatList, StyleSheet } from 'react-native';
 import { IconButton, Button, TextInput } from 'react-native-paper';
 import SafeView from '../../Common/Components/SafeView';
 import Colors from '../../Common/Colors';
@@ -17,8 +17,10 @@ type State = {
 };
 
 class Sequence extends React.PureComponent<Props, State> {
+  textInput: TextInput;
+
   state = {
-    items: [],
+    items: [], // TODO: Change to global state (context)
     text: '',
   };
 
@@ -27,95 +29,106 @@ class Sequence extends React.PureComponent<Props, State> {
   };
 
   _onAdd = () => {
-    this.textInput.clear();
+    const { items, text } = this.state;
+    if (items.includes(text)) {
+      return Alert.alert(`Symbol ${text} already exists`);
+    }
     this.setState(prev => ({
       items: [...prev.items, prev.text],
+      text: '',
     }));
+    this.textInput.clear();
   };
 
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
 
-  _renderItem = (item: { item: string, idx: number }) => null;
+  _renderItem = (item: { item: string }) => (
+    <Card
+      key={`i-${item.item}`}
+      title={item.item}
+      onPress={() => {
+        Alert.alert(
+          'Do you want to remove the card?',
+          'This action cannot be undone',
+          [
+            {
+              text: 'Cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                this.setState((prev: State) => ({
+                  items: prev.items.filter((v: string) => v !== item.item),
+                }));
+              },
+              style: 'destructive',
+            },
+          ],
+        );
+      }}
+    />
+  );
 
   render() {
+    const { text, items } = this.state;
     return (
-      <>
-        <SafeView>
-          <View style={{ height: 56 }}>
-            <IconButton
-              icon="close"
-              color={Colors.White}
-              onPress={this.props.onClose}
-              style={{
-                position: 'absolute',
-                right: 0,
-              }}
-            />
-          </View>
-          <TextInput
-            ref={(ref: any) => {
-              this.textInput = ref;
-            }}
+      <SafeView>
+        <View style={{ height: 56 }}>
+          <IconButton
+            icon="close"
+            color={Colors.White}
+            onPress={this.props.onClose}
             style={{
-              margin: 20,
+              position: 'absolute',
+              right: 0,
             }}
-            value={this.state.text}
-            onChangeText={this._onChange}
-            mode="outlined"
-            underlineColor="white"
-            maxLength={3}
-            placeholder="Type a symbol..."
           />
-          <Button
-            style={{
-              marginHorizontal: 40, // TODO: Change?
-            }}
-            mode="contained"
-            dark
-            color={Colors.Yellow600}
-            onPress={this._onAdd}
-            icon="add">
-            Add
-          </Button>
-          <SwipeableFlatList
-            maxSwipeDistance={1}
-            contentContainerStyle={{
-              flexGrow: 1,
-            }}
-            data={this.state.items}
-            keyExtractor={this._getKeyExtractor}
-            renderItem={item => (
-              <Card
-                key={`i-${item.item}`}
-                title={item.item}
-                onPress={() => {
-                  Alert.alert(
-                    'Do you want to remove the card?',
-                    'This action cannot be undone',
-                    [
-                      {
-                        text: 'Cancel',
-                      },
-                      {
-                        text: 'OK',
-                        onPress: () => {
-                          this.setState(prev => ({
-                            items: [], // TODO: Remove item
-                          }));
-                        },
-                        style: 'destructive',
-                      },
-                    ],
-                  );
-                }}
-              />
-            )}
-            ListEmptyComponent={<EmptyListComponent />}
-          />
-        </SafeView>
-      </>
+        </View>
+        <TextInput
+          ref={(ref: any) => {
+            this.textInput = ref;
+          }}
+          style={{
+            margin: 20,
+          }}
+          value={text}
+          onChangeText={this._onChange}
+          mode="outlined"
+          underlineColor="white"
+          maxLength={3}
+          placeholder="Type a symbol..."
+        />
+        <Button
+          style={{
+            marginHorizontal: 20, // TODO: Change?
+          }}
+          mode="contained"
+          dark
+          disabled={!text.length}
+          color={Colors.Yellow600}
+          onPress={this._onAdd}
+          icon="add">
+          Add
+        </Button>
+        <FlatList
+          contentContainerStyle={styles.contentContainerStyle}
+          numColumns={3}
+          data={items}
+          keyExtractor={this._getKeyExtractor}
+          renderItem={this._renderItem}
+          ListEmptyComponent={<EmptyListComponent />}
+        />
+      </SafeView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  contentContainerStyle: {
+    flexGrow: 1,
+    padding: 20,
+    alignSelf: 'center',
+  },
+});
 
 export default Sequence;

@@ -15,7 +15,7 @@ type State = {
 
 class Settings extends React.PureComponent<{}, State> {
   state = {
-    screen: 'sequence', // none
+    screen: 'none',
   };
 
   onClose = () => {
