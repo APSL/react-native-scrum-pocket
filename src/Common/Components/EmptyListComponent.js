@@ -9,8 +9,8 @@ const EmptyListComponent = () => (
   <View style={styles.container}>
     <Icon name="mood-bad" size={110} color={Colors.grey300} />
     <Headline style={styles.headline}>
-      Oops! The list is empty! You can{' '}
-      <Text style={{ fontWeight: 'bold', fontSize: 40 }}>+</Text> a new symbol
+      Oops! The list is empty! You can <Text style={styles.text}>+</Text> a new card
+      at the top of the list
     </Headline>
   </View>
 );
@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 40,
   },
   headline: {
     textAlign: 'center',

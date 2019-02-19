@@ -1,12 +1,13 @@
 /* @flow */
 
 import React from 'react';
-import { View, Alert, FlatList, StyleSheet } from 'react-native';
-import { IconButton, Button, TextInput } from 'react-native-paper';
+import { Alert, FlatList, StyleSheet } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 import SafeView from '../../Common/Components/SafeView';
 import Colors from '../../Common/Colors';
 import Card from '../../Common/Components/Card';
 import EmptyListComponent from '../../Common/Components/EmptyListComponent';
+import NavigationBar from '../../Common/Components/NavigationBar';
 
 type Props = {
   items: Array<string>,
@@ -70,30 +71,22 @@ class Sequence extends React.PureComponent<Props, State> {
     const { text } = this.state;
     return (
       <SafeView>
-        <View style={{ height: 56 }}>
-          <IconButton
-            icon="close"
-            color={Colors.White}
-            onPress={this.props.onClose}
-            style={{
-              position: 'absolute',
-              right: 0,
-            }}
-          />
-        </View>
+        <NavigationBar onPress={this.props.onClose} />
         <TextInput
           ref={(ref: any) => {
             this.textInput = ref;
           }}
+          placeholder="Type a symbol..."
           style={{
-            margin: 20,
+            marginBottom: 20,
+            marginLeft: 20,
+            marginRight: 20,
           }}
           value={text}
           onChangeText={this._onChange}
           mode="outlined"
-          underlineColor="white"
+          underlineColor={Colors.White}
           maxLength={3}
-          placeholder="Type a symbol..."
         />
         <Button
           style={{

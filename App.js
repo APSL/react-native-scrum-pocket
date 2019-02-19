@@ -3,6 +3,7 @@
 import React from 'react';
 import { Animated, StatusBar, AsyncStorage } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from './src/Context';
 import SafeView from './src/Common/Components/SafeView';
 import CardStack from './src/Home/Components/CardStack';
 import Deck from './src/Utils/DeckTypes';
@@ -10,14 +11,6 @@ import Slider from './src/Common/Components/Slider';
 import SliderItem from './src/Common/Components/SliderItem';
 import Settings from './src/Home/Components/Settings';
 import Colors from './src/Common/Colors';
-
-export const { Provider, Consumer } = React.createContext({
-  settings: {
-    Deck: [],
-  },
-  addItem: () => {},
-  removeItem: () => {},
-});
 
 type State = {
   hidden: boolean,
@@ -27,14 +20,14 @@ type State = {
 class App extends React.PureComponent<*, State> {
   state = {
     hidden: false,
-    deck: Deck.Standard,
+    deck: [],
   };
 
   componentDidMount() {
     AsyncStorage.getItem('deck').then((deck: string) => {
       const items = JSON.parse(deck);
       if (items && items.length) {
-        this.setState({ deck: items });
+        this.setState({ deck: [] });
       }
     });
   }

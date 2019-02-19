@@ -1,14 +1,22 @@
 /* @flow */
 
 import React from 'react';
-import { ScrollView, Switch, PixelRatio, StyleSheet, Modal } from 'react-native';
+import {
+  ScrollView,
+  Switch,
+  PixelRatio,
+  StyleSheet,
+  Modal,
+  AsyncStorage,
+} from 'react-native';
 import { List } from 'react-native-paper';
-import withSettings from '../../withSettings';
+import KeepAwake from 'react-native-keep-awake';
+import withSettings from '../../Common/withSettings';
 import About from './About';
 import Sequence from './Sequence';
 import Colors from '../../Common/Colors';
 
-import type { SettingsType, ActionsType } from '../../Common/Types/ContextType';
+import type { SettingsType, ActionsType } from '../../Context';
 
 type Props = {
   settings: SettingsType,
@@ -16,12 +24,27 @@ type Props = {
 };
 type State = {
   screen: 'sequence' | 'about' | 'none',
+  isKeepScreenOn: boolean,
 };
 
 class Settings extends React.PureComponent<Props, State> {
   state = {
     screen: 'none',
+    isKeepScreenOn: false,
   };
+
+  componentDidMount() {
+    AsyncStorage.getItem('screenState').then(v => {
+      if (!v || v === 'off') {
+        return this.setState({
+          isKeepScreenOn: false,
+        });
+      }
+      return this.setState({
+        isKeepScreenOn: true,
+      });
+    });
+  }
 
   onClose = () => {
     this.setState({
@@ -35,6 +58,22 @@ class Settings extends React.PureComponent<Props, State> {
 
   _removeItem = (item: string) => {
     this.props.actions.removeItem(item);
+  };
+
+  _onValueChange = () => {
+    const { isKeepScreenOn } = this.state;
+    this.setState(
+      (prev: State) => ({
+        isKeepScreenOn: !prev.isKeepScreenOn,
+      }),
+      () => {
+        AsyncStorage.setItem('screenState', isKeepScreenOn === true ? 'off' : 'on');
+        if (this.state.isKeepScreenOn) {
+          return KeepAwake.activate();
+        }
+        return KeepAwake.deactivate();
+      },
+    );
   };
 
   render() {
@@ -90,10 +129,12 @@ class Settings extends React.PureComponent<Props, State> {
           <List.Item
             title="Keep screen on"
             description="Prevents automatic display shutdown"
-            onPress={() => {}} // TODO: Event
+            onPress={this._onValueChange}
             left={props => <List.Icon {...props} icon="phone-android" />}
             right={() => (
               <Switch
+                value={this.state.isKeepScreenOn}
+                onValueChange={this._onValueChange}
                 style={{
                   top: 18,
                 }}

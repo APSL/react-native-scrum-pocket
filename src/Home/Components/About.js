@@ -5,15 +5,15 @@ import {
   ScrollView,
   View,
   Animated,
-  Text,
   StyleSheet,
   Dimensions,
   Easing,
   Linking,
 } from 'react-native';
-import { Button, IconButton } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import Colors from '../../Common/Colors';
 import SafeView from '../../Common/Components/SafeView';
+import NavigationBar from '../../Common/Components/NavigationBar';
 
 const apslLogo = require('./img/logo.png');
 
@@ -35,17 +35,7 @@ class About extends React.PureComponent<Props> {
   render() {
     return (
       <SafeView>
-        <IconButton
-          icon="close"
-          color={Colors.White}
-          onPress={this.props.onClose}
-          style={{
-            zIndex: 1,
-            position: 'absolute',
-            top: 20,
-            right: 0,
-          }}
-        />
+        <NavigationBar onPress={this.props.onClose} />
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
@@ -89,10 +79,8 @@ class About extends React.PureComponent<Props> {
           <View style={styles.textContainer}>
             <Text style={styles.text}>
               Made with ❤️ by the Mobile Team at APSL.net with{' '}
-              <Text style={styles.mono}>React Native</Text>,
-{' '}
-              <Text style={styles.mono}>react-native-paper</Text> and
-{' '}
+              <Text style={styles.mono}>React Native</Text>,{' '}
+              <Text style={styles.mono}>react-native-paper</Text> and{' '}
               <Text style={styles.mono}>react-native-vector-icons</Text>.
             </Text>
           </View>

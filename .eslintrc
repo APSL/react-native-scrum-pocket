@@ -3,11 +3,10 @@
   "extends": "airbnb",
   "plugins": ["react", "flowtype", "jsx-a11y", "import", "prettier"],
   "globals": {
+    "JSX": true,
     "Generator": true,
-    "FormData": true,
     "navigator": true,
-    "React$ComponentType": true,
-    "window": true
+    "React$ComponentType": true
   },
   "rules": {
     "prettier/prettier": [

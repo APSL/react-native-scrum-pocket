@@ -1,9 +1,9 @@
 /* @flow */
 
 import React from 'react';
-import { Consumer } from '../App';
+import { Consumer } from '../Context';
 
-const withSettings = (Component: JSX.Element) => (props: *) => (
+const withSettings = (Component: React$ComponentType) => (props: any) => (
   <Consumer>
     {({ settings, addItem, removeItem }) => (
       <Component
