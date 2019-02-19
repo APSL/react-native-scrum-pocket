@@ -40,7 +40,7 @@ class About extends React.PureComponent<Props> {
         <ScrollView
           style={styles.container}
           contentContainerStyle={{
-            paddingBottom: 20,
+            paddingBottom: 40,
           }}
           scrollEventThrottle={12}
           onScroll={Animated.event([
