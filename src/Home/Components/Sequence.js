@@ -77,11 +77,7 @@ class Sequence extends React.PureComponent<Props, State> {
             this.textInput = ref;
           }}
           placeholder="Type a symbol..."
-          style={{
-            marginBottom: 20,
-            marginLeft: 20,
-            marginRight: 20,
-          }}
+          style={styles.button}
           value={text}
           onChangeText={this._onChange}
           mode="outlined"
@@ -89,11 +85,7 @@ class Sequence extends React.PureComponent<Props, State> {
           maxLength={3}
         />
         <Button
-          style={{
-            marginLeft: 20,
-            marginRight: 20,
-            marginBottom: 20,
-          }}
+          style={styles.button}
           mode="contained"
           dark
           disabled={!text.length}
@@ -119,6 +111,11 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
     alignSelf: 'center',
+  },
+  button: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 20,
   },
 });
 

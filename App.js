@@ -27,7 +27,7 @@ class App extends React.PureComponent<*, State> {
     AsyncStorage.getItem('deck').then((deck: string) => {
       const items = JSON.parse(deck);
       if (items && items.length) {
-        this.setState({ deck: [] });
+        this.setState({ deck: items });
       }
     });
   }
@@ -61,7 +61,7 @@ class App extends React.PureComponent<*, State> {
             deck: this.getDeck(),
           },
           addItem: (item: string) => {
-            const newItems = [...this.state.deck, item];
+            const newItems = [...this.state.deck, item]; // Get the last items
             AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
               this.setState({
                 deck: newItems,
@@ -72,7 +72,7 @@ class App extends React.PureComponent<*, State> {
             const newItems = this.state.deck.filter((v: string) => v !== item);
             AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
               this.setState({
-                deck: newItems,
+                deck: newItems.length === 0 ? Deck.Standard : newItems,
               });
             });
           },
@@ -104,7 +104,7 @@ class App extends React.PureComponent<*, State> {
                 <>
                   <SliderItem animated={animated} itemPage={0} page={page}>
                     <CardStack
-                      deck={this.state.deck}
+                      deck={!this.state.deck.length ? Deck.Standard : this.state.deck}
                       onPressCard={this._onPressCard}
                     />
                   </SliderItem>
