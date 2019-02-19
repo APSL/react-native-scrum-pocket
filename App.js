@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Animated, StatusBar, AsyncStorage } from 'react-native';
+import { Animated, StatusBar, AsyncStorage, Vibration } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from './src/Context';
 import SafeView from './src/Common/Components/SafeView';
@@ -33,6 +33,11 @@ class App extends React.PureComponent<*, State> {
   }
 
   _onPressCard = () => {
+    AsyncStorage.getItem('vibrate').then((v: string) => {
+      if (v === 'on') {
+        Vibration.vibrate(400, false);
+      }
+    });
     this.setState((prev: State) => ({
       hidden: !prev.hidden,
     }));

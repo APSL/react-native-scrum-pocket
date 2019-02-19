@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  View,
   ScrollView,
   Switch,
   PixelRatio,
@@ -9,8 +10,9 @@ import {
   Modal,
   AsyncStorage,
 } from 'react-native';
-import { List } from 'react-native-paper';
+import { List, Text } from 'react-native-paper';
 import KeepAwake from 'react-native-keep-awake';
+import VersionNumber from 'react-native-version-number';
 import withSettings from '../../Common/withSettings';
 import About from './About';
 import Sequence from './Sequence';
@@ -25,25 +27,26 @@ type Props = {
 type State = {
   screen: 'sequence' | 'about' | 'none',
   isKeepScreenOn: boolean,
+  vibrate: boolean,
 };
 
 class Settings extends React.PureComponent<Props, State> {
   state = {
     screen: 'none',
     isKeepScreenOn: false,
+    vibrate: false,
   };
 
   componentDidMount() {
-    AsyncStorage.getItem('screenState').then(v => {
-      if (!v || v === 'off') {
-        return this.setState({
-          isKeepScreenOn: false,
+    // TODO: Refactor?
+    AsyncStorage.multiGet(['screenState', 'vibrate']).then(
+      (v: Array<Array<string>>) => {
+        this.setState({
+          isKeepScreenOn: v[0][1] === 'on',
+          vibrate: v[1][1] === 'on',
         });
-      }
-      return this.setState({
-        isKeepScreenOn: true,
-      });
-    });
+      },
+    );
   }
 
   onClose = () => {
@@ -60,7 +63,7 @@ class Settings extends React.PureComponent<Props, State> {
     this.props.actions.removeItem(item);
   };
 
-  _onValueChange = () => {
+  _onChangeScreenState = () => {
     const { isKeepScreenOn } = this.state;
     this.setState(
       (prev: State) => ({
@@ -76,92 +79,113 @@ class Settings extends React.PureComponent<Props, State> {
     );
   };
 
+  _onChange = () => {
+    const { vibrate } = this.state;
+    this.setState(
+      (prev: State) => ({
+        vibrate: !prev.vibrate,
+      }),
+      () => {
+        AsyncStorage.setItem('vibrate', vibrate === true ? 'off' : 'on');
+      },
+    );
+  };
+
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-        }}>
-        <List.Section title="DECK SETTINGS">
-          <List.Item
-            title="Custom sequence"
-            description="Use a custom sequence instead Standard"
-            left={props => <List.Icon {...props} icon="dashboard" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {
-              this.setState({
-                screen: 'sequence',
-              });
-            }}
-            style={styles.item}
-          />
-          <Modal
-            visible={this.state.screen === 'sequence'}
-            animated
-            animationType="slide">
-            <Sequence
-              items={this.props.settings.deck}
-              onClose={this.onClose}
-              addItem={this._addItem}
-              removeItem={this._removeItem}
+      <>
+        <ScrollView
+          style={{
+            flex: 1,
+          }}>
+          <List.Section title="DECK SETTINGS">
+            <List.Item
+              title="Custom sequence"
+              description="Use a custom sequence instead Standard"
+              left={props => <List.Icon {...props} icon="dashboard" />}
+              right={props => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => {
+                this.setState({
+                  screen: 'sequence',
+                });
+              }}
+              style={styles.item}
             />
-          </Modal>
-        </List.Section>
-        <List.Section title="GENERAL SETTINGS">
-          <List.Item
-            title="Vibration"
-            description="Use vibration when rotating a card"
-            left={props => <List.Icon {...props} icon="vibration" />}
-            onPress={() => {}} // TODO: Event
-            right={() => (
-              <Switch
-                style={{
-                  top: 18,
-                }}
-                trackColor={{
-                  false: Colors.White,
-                  true: Colors.Yellow600,
-                }}
+            <Modal
+              visible={this.state.screen === 'sequence'}
+              animated
+              animationType="slide">
+              <Sequence
+                items={this.props.settings.deck}
+                onClose={this.onClose}
+                addItem={this._addItem}
+                removeItem={this._removeItem}
               />
-            )}
-            style={styles.item}
-          />
-          <List.Item
-            title="Keep screen on"
-            description="Prevents automatic display shutdown"
-            onPress={this._onValueChange}
-            left={props => <List.Icon {...props} icon="phone-android" />}
-            right={() => (
-              <Switch
-                value={this.state.isKeepScreenOn}
-                onValueChange={this._onValueChange}
-                style={{
-                  top: 18,
-                }}
-                trackColor={{
-                  false: Colors.White,
-                  true: Colors.Yellow600,
-                }}
-              />
-            )}
-          />
-          <List.Item
-            title="About"
-            onPress={() => {
-              this.setState({
-                screen: 'about',
-              });
-            }}
-            left={props => <List.Icon {...props} icon="info" />}
-          />
-          <Modal
-            visible={this.state.screen === 'about'}
-            animated
-            animationType="slide">
-            <About onClose={this.onClose} />
-          </Modal>
-        </List.Section>
-      </ScrollView>
+            </Modal>
+          </List.Section>
+          <List.Section title="GENERAL SETTINGS">
+            <List.Item
+              title="Vibration"
+              description="Use vibration when rotating a card"
+              left={props => <List.Icon {...props} icon="vibration" />}
+              onPress={this._onChange}
+              right={() => (
+                <Switch
+                  onValueChange={this._onChange}
+                  value={this.state.vibrate}
+                  style={{
+                    top: 18,
+                  }}
+                  trackColor={{
+                    false: Colors.White,
+                    true: Colors.Yellow600,
+                  }}
+                />
+              )}
+              style={styles.item}
+            />
+            <List.Item
+              title="Keep screen on"
+              description="Prevents automatic display shutdown"
+              onPress={this._onChangeScreenState}
+              left={props => <List.Icon {...props} icon="phone-android" />}
+              right={() => (
+                <Switch
+                  value={this.state.isKeepScreenOn}
+                  onValueChange={this._onChangeScreenState}
+                  style={{
+                    top: 18,
+                  }}
+                  trackColor={{
+                    false: Colors.White,
+                    true: Colors.Yellow600,
+                  }}
+                />
+              )}
+            />
+            <List.Item
+              title="About"
+              onPress={() => {
+                this.setState({
+                  screen: 'about',
+                });
+              }}
+              left={props => <List.Icon {...props} icon="info" />}
+            />
+            <Modal
+              visible={this.state.screen === 'about'}
+              animated
+              animationType="slide">
+              <About onClose={this.onClose} />
+            </Modal>
+          </List.Section>
+        </ScrollView>
+        <View style={styles.bottom}>
+          <Text style={styles.version}>
+            {`${VersionNumber.appVersion} (${VersionNumber.buildVersion})`}
+          </Text>
+        </View>
+      </>
     );
   }
 }
@@ -170,6 +194,14 @@ const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 1 / PixelRatio.get(),
     borderBottomColor: Colors.Grey500,
+  },
+  version: {
+    fontWeight: '600',
+    fontFamily: 'AvenirNext-Regular',
+  },
+  bottom: {
+    alignItems: 'center',
+    padding: 10,
   },
 });
 
