@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Animated, StatusBar } from 'react-native';
+import { Animated, StatusBar, AsyncStorage } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import SafeView from './src/Common/Components/SafeView';
 import CardStack from './src/Home/Components/CardStack';
@@ -11,14 +11,33 @@ import SliderItem from './src/Common/Components/SliderItem';
 import Settings from './src/Home/Components/Settings';
 import Colors from './src/Common/Colors';
 
+export const { Provider, Consumer } = React.createContext({
+  settings: {
+    Deck: [],
+  },
+  addItem: () => {},
+  removeItem: () => {},
+});
+
 type State = {
   hidden: boolean,
+  deck: Array<string>,
 };
 
 class App extends React.PureComponent<*, State> {
   state = {
     hidden: false,
+    deck: Deck.Standard,
   };
+
+  componentDidMount() {
+    AsyncStorage.getItem('deck').then((deck: string) => {
+      const items = JSON.parse(deck);
+      if (items && items.length) {
+        this.setState({ deck: items });
+      }
+    });
+  }
 
   _onPressCard = () => {
     this.setState((prev: State) => ({
@@ -26,59 +45,95 @@ class App extends React.PureComponent<*, State> {
     }));
   };
 
+  /**
+   * Function to get deck type
+   */
+  getDeck(): Array<string> {
+    if (this.state.deck === Deck.Standard) {
+      return [];
+    }
+    return this.state.deck;
+  }
+
   render() {
     return (
-      <PaperProvider
-        theme={{
-          ...DefaultTheme,
-          dark: true,
-          colors: {
-            ...DefaultTheme.colors,
-            primary: Colors.Yellow600,
-            text: Colors.White,
-            placeholder: Colors.Grey500,
+      <Provider
+        value={{
+          settings: {
+            deck: this.getDeck(),
+          },
+          addItem: (item: string) => {
+            const newItems = [...this.state.deck, item];
+            AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
+              this.setState({
+                deck: newItems,
+              });
+            });
+          },
+          removeItem: (item: string) => {
+            const newItems = this.state.deck.filter((v: string) => v !== item);
+            AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
+              this.setState({
+                deck: newItems,
+              });
+            });
           },
         }}>
-        <SafeView>
-          <StatusBar barStyle="light-content" />
-          <Slider
-            pages={[
-              'Standard',
-              'T-Shirt',
-              'Fibonacci',
-              'Risk Planning',
-              'Settings',
-            ]}
-            hidden={this.state.hidden}
-            initialPage={4}
-            items={(page: number, animated: Animated.Value) => (
-              <>
-                <SliderItem animated={animated} itemPage={0} page={page}>
-                  <CardStack deck={Deck.Standard} onPressCard={this._onPressCard} />
-                </SliderItem>
-                <SliderItem animated={animated} itemPage={1} page={page}>
-                  <CardStack deck={Deck.TShirt} onPressCard={this._onPressCard} />
-                </SliderItem>
-                <SliderItem animated={animated} itemPage={2} page={page}>
-                  <CardStack
-                    deck={Deck.Fibonacci}
-                    onPressCard={this._onPressCard}
-                  />
-                </SliderItem>
-                <SliderItem animated={animated} itemPage={3} page={page}>
-                  <CardStack
-                    deck={Deck.RiskPlanning}
-                    onPressCard={this._onPressCard}
-                  />
-                </SliderItem>
-                <SliderItem animated={animated} itemPage={4} page={page}>
-                  <Settings />
-                </SliderItem>
-              </>
-            )}
-          />
-        </SafeView>
-      </PaperProvider>
+        <PaperProvider
+          theme={{
+            ...DefaultTheme,
+            dark: true,
+            colors: {
+              ...DefaultTheme.colors,
+              primary: Colors.Yellow600,
+              text: Colors.White,
+              placeholder: Colors.Grey500,
+            },
+          }}>
+          <SafeView>
+            <StatusBar barStyle="light-content" />
+            <Slider
+              pages={[
+                'Standard',
+                'T-Shirt',
+                'Fibonacci',
+                'Risk Planning',
+                'Settings',
+              ]}
+              hidden={this.state.hidden}
+              initialPage={0}
+              items={(page: number, animated: Animated.Value) => (
+                <>
+                  <SliderItem animated={animated} itemPage={0} page={page}>
+                    <CardStack
+                      deck={this.state.deck}
+                      onPressCard={this._onPressCard}
+                    />
+                  </SliderItem>
+                  <SliderItem animated={animated} itemPage={1} page={page}>
+                    <CardStack deck={Deck.TShirt} onPressCard={this._onPressCard} />
+                  </SliderItem>
+                  <SliderItem animated={animated} itemPage={2} page={page}>
+                    <CardStack
+                      deck={Deck.Fibonacci}
+                      onPressCard={this._onPressCard}
+                    />
+                  </SliderItem>
+                  <SliderItem animated={animated} itemPage={3} page={page}>
+                    <CardStack
+                      deck={Deck.RiskPlanning}
+                      onPressCard={this._onPressCard}
+                    />
+                  </SliderItem>
+                  <SliderItem animated={animated} itemPage={4} page={page}>
+                    <Settings />
+                  </SliderItem>
+                </>
+              )}
+            />
+          </SafeView>
+        </PaperProvider>
+      </Provider>
     );
   }
 }

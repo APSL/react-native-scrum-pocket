@@ -2,18 +2,23 @@
 
 import React from 'react';
 import { ScrollView, Switch, PixelRatio, StyleSheet, Modal } from 'react-native';
-import { List, Checkbox } from 'react-native-paper';
-// import SettingsCell from '../../Common/Components/SettingsCell';
+import { List } from 'react-native-paper';
+import withSettings from '../../withSettings';
 import About from './About';
-
-import Colors from '../../Common/Colors';
 import Sequence from './Sequence';
+import Colors from '../../Common/Colors';
 
+import type { SettingsType, ActionsType } from '../../Common/Types/ContextType';
+
+type Props = {
+  settings: SettingsType,
+  actions: ActionsType,
+};
 type State = {
   screen: 'sequence' | 'about' | 'none',
 };
 
-class Settings extends React.PureComponent<{}, State> {
+class Settings extends React.PureComponent<Props, State> {
   state = {
     screen: 'none',
   };
@@ -22,6 +27,14 @@ class Settings extends React.PureComponent<{}, State> {
     this.setState({
       screen: 'none',
     });
+  };
+
+  _addItem = (item: string) => {
+    this.props.actions.addItem(item);
+  };
+
+  _removeItem = (item: string) => {
+    this.props.actions.removeItem(item);
   };
 
   render() {
@@ -47,7 +60,12 @@ class Settings extends React.PureComponent<{}, State> {
             visible={this.state.screen === 'sequence'}
             animated
             animationType="slide">
-            <Sequence onClose={this.onClose} />
+            <Sequence
+              items={this.props.settings.deck}
+              onClose={this.onClose}
+              addItem={this._addItem}
+              removeItem={this._removeItem}
+            />
           </Modal>
         </List.Section>
         <List.Section title="GENERAL SETTINGS">
@@ -114,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Settings;
+export default withSettings(Settings);

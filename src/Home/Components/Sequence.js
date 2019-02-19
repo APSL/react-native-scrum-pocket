@@ -9,10 +9,12 @@ import Card from '../../Common/Components/Card';
 import EmptyListComponent from '../../Common/Components/EmptyListComponent';
 
 type Props = {
+  items: Array<string>,
   onClose: () => void,
+  addItem: (item: string) => void,
+  removeItem: (item: string) => void,
 };
 type State = {
-  items: Array<string>,
   text: string,
 };
 
@@ -20,24 +22,21 @@ class Sequence extends React.PureComponent<Props, State> {
   textInput: TextInput;
 
   state = {
-    items: [], // TODO: Change to global state (context)
     text: '',
   };
 
   _onChange = (text: string) => {
-    this.setState({ text });
+    this.setState({
+      text,
+    });
   };
 
   _onAdd = () => {
-    const { items, text } = this.state;
-    if (items.includes(text)) {
-      return Alert.alert(`Symbol ${text} already exists`);
-    }
-    this.setState(prev => ({
-      items: [...prev.items, prev.text],
-      text: '',
-    }));
+    const { text } = this.state;
     this.textInput.clear();
+    return this.setState({ text: '' }, () => {
+      this.props.addItem(text);
+    });
   };
 
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
@@ -57,9 +56,7 @@ class Sequence extends React.PureComponent<Props, State> {
             {
               text: 'OK',
               onPress: () => {
-                this.setState((prev: State) => ({
-                  items: prev.items.filter((v: string) => v !== item.item),
-                }));
+                this.props.removeItem(item.item);
               },
               style: 'destructive',
             },
@@ -70,7 +67,7 @@ class Sequence extends React.PureComponent<Props, State> {
   );
 
   render() {
-    const { text, items } = this.state;
+    const { text } = this.state;
     return (
       <SafeView>
         <View style={{ height: 56 }}>
@@ -100,7 +97,9 @@ class Sequence extends React.PureComponent<Props, State> {
         />
         <Button
           style={{
-            marginHorizontal: 20, // TODO: Change?
+            marginLeft: 20,
+            marginRight: 20,
+            marginBottom: 20,
           }}
           mode="contained"
           dark
@@ -113,7 +112,7 @@ class Sequence extends React.PureComponent<Props, State> {
         <FlatList
           contentContainerStyle={styles.contentContainerStyle}
           numColumns={3}
-          data={items}
+          data={this.props.items}
           keyExtractor={this._getKeyExtractor}
           renderItem={this._renderItem}
           ListEmptyComponent={<EmptyListComponent />}
@@ -126,7 +125,6 @@ class Sequence extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
-    padding: 20,
     alignSelf: 'center',
   },
 });
