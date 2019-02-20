@@ -112,7 +112,7 @@ class Settings extends React.PureComponent<Props, State> {
       <ScrollView style={styles.content}>
         <List.Section title="DECK SETTINGS">
           <List.Item
-            description="Use a custom sequence instead Standard"
+            description="Use a custom sequence instead of Standard"
             left={props => <List.Icon {...props} icon="dashboard" />}
             onPress={() => {
               this.setState({
