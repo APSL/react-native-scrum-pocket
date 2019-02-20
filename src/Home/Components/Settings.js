@@ -102,10 +102,7 @@ class Settings extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-        }}>
+      <ScrollView style={styles.content}>
         <List.Section title="DECK SETTINGS">
           <List.Item
             description="Use a custom sequence instead Standard"
@@ -215,6 +212,9 @@ class Settings extends React.PureComponent<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+  },
   item: {
     borderBottomWidth: 1 / PixelRatio.get(),
     borderBottomColor: Colors.Grey500,
