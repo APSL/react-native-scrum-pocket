@@ -1,7 +1,14 @@
 /* @flow */
 
 import React from 'react';
-import { View, Animated, StyleSheet, Dimensions, PixelRatio } from 'react-native';
+import {
+  View,
+  Animated,
+  StyleSheet,
+  Dimensions,
+  PixelRatio,
+  Platform,
+} from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import Colors from '../Colors';
 
@@ -79,6 +86,12 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'AvenirNextCondensed-Regular',
     padding: 10,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto',
+        fontSize: 13,
+      },
+    }),
   },
 });
 

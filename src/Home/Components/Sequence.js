@@ -100,16 +100,17 @@ class Sequence extends React.PureComponent<Props, State> {
           data={this.props.items}
           keyExtractor={this._getKeyExtractor}
           ListEmptyComponent={<EmptyListComponent />}
-          ListHeaderComponent={
-            <IconButton
-              disabled={!this.props.items.length}
-              icon="delete-forever"
-              onPress={this.props.onPressRemove}
-            />
-          }
           numColumns={3}
           renderItem={this._renderItem}
         />
+        {this.props.items.length ? (
+          <IconButton
+            icon="delete-forever"
+            onPress={this.props.onPressRemove}
+            size={28}
+            style={styles.trash}
+          />
+        ) : null}
       </SafeView>
     );
   }
@@ -126,9 +127,15 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 20,
   },
+  trash: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+  },
   button: {
     marginLeft: 20,
     marginRight: 20,
+    marginBottom: 20,
   },
 });
 
