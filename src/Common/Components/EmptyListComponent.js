@@ -2,15 +2,13 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Headline, Colors } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Headline } from 'react-native-paper';
 
 const EmptyListComponent = () => (
   <View style={styles.container}>
-    <Icon color={Colors.grey300} name="mood-bad" size={110} />
+    <Headline style={styles.headline}>Oops! The list is empty!</Headline>
     <Headline style={styles.headline}>
-      Oops! The list is empty! You can <Text style={styles.text}>+</Text> a new card
-      at the top of the list
+      You can <Text style={styles.text}>+</Text> a new card at the top of the list
     </Headline>
   </View>
 );

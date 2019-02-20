@@ -8,8 +8,10 @@ import {
   StyleSheet,
   Modal,
   AsyncStorage,
+  View,
 } from 'react-native';
 import { List } from 'react-native-paper';
+import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import KeepAwake from 'react-native-keep-awake';
 import VersionNumber from 'react-native-version-number';
 import withSettings from '../../Common/withSettings';
@@ -18,13 +20,14 @@ import Sequence from './Sequence';
 import Colors from '../../Common/Colors';
 
 import type { SettingsType, ActionsType } from '../../Context';
+import PlanningPoker from './PlanningPoker';
 
 type Props = {
   settings: SettingsType,
   actions: ActionsType,
 };
 type State = {
-  screen: 'sequence' | 'about' | 'none',
+  screen: 'sequence' | 'about' | 'planning' | 'none',
   isKeepScreenOn: boolean,
   vibrate: boolean,
 };
@@ -162,6 +165,26 @@ class Settings extends React.PureComponent<Props, State> {
             title="Keep screen on"
           />
           <List.Item
+            left={props => (
+              <View style={styles.icon}>
+                <MaterialCommunity {...props} name="cards" size={24} />
+              </View>
+            )}
+            onPress={() => {
+              this.setState({
+                screen: 'planning',
+              });
+            }}
+            title="About Scrum Poker"
+          />
+          <Modal
+            animated
+            animationType="slide"
+            onRequestClose={this._onRequestClose}
+            visible={this.state.screen === 'planning'}>
+            <PlanningPoker onClose={this._onRequestClose} />
+          </Modal>
+          <List.Item
             description={`Version ${VersionNumber.appVersion} (${
               VersionNumber.buildVersion
             })`}
@@ -201,6 +224,13 @@ const styles = StyleSheet.create({
   },
   switch: {
     alignSelf: 'center',
+  },
+  icon: {
+    margin: 8,
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

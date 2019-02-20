@@ -1,28 +1,30 @@
 /* @flow */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Colors from '../Colors';
+import SafeView from './SafeView';
 
 type Props = {
   onPress: () => void,
 };
 
 const NavigationBar = (props: Props) => (
-  <View style={styles.container}>
+  <SafeView style={styles.container}>
     <IconButton
       color={Colors.White}
       icon="close"
       onPress={props.onPress}
       style={styles.button}
     />
-  </View>
+  </SafeView>
 );
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
+    flex: 0,
+    zIndex: 1,
   },
   button: {
     position: 'absolute',

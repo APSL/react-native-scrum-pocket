@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
+    marginTop: 50,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 20,
   },
 });
 
