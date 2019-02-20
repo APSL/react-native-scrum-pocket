@@ -82,9 +82,10 @@ class About extends React.PureComponent<Props> {
             <View style={styles.textContainer}>
               <Text style={styles.text}>
                 Made with ❤️ by the Mobile Team at APSL.net with{' '}
-                <Text style={styles.mono}>React Native</Text>,{' '}
-                <Text style={styles.mono}>react-native-paper</Text> and{' '}
-                <Text style={styles.mono}>react-native-vector-icons</Text>.
+                <Text style={styles.mono}>
+                  React Native, react-native-paper, react-native-vector-icons,
+                  react-native-keep-awake & react-native-version-number
+                </Text>
               </Text>
             </View>
             <View style={styles.textContainer}>

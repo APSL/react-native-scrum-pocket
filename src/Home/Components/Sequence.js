@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet, Platform } from 'react-native';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import SafeView from '../../Common/Components/SafeView';
 import Colors from '../../Common/Colors';
@@ -35,8 +35,8 @@ class Sequence extends React.PureComponent<Props, State> {
 
   _onAdd = () => {
     const { text } = this.state;
-    this.textInput.clear();
     return this.setState({ text: '' }, () => {
+      this.textInput.clear();
       this.props.addItem(text);
     });
   };
@@ -122,7 +122,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    marginTop: 50,
+    ...Platform.select({
+      ios: {
+        marginTop: 50,
+      },
+      android: {
+        marginTop: 0,
+      },
+    }),
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 20,

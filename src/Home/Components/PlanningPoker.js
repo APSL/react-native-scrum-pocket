@@ -37,17 +37,9 @@ class PlanningPoker extends React.PureComponent<Props> {
                 {
                   rotateY: this._scroll.interpolate({
                     inputRange: [-100, 0, 100],
-                    outputRange: ['180deg', '0deg', '180deg'],
+                    outputRange: ['360deg', '0deg', '180deg'],
                     extrapolate: 'clamp',
                     easing: Easing.ease,
-                  }),
-                },
-                {
-                  scale: this._scroll.interpolate({
-                    inputRange: [-100, 0, 100],
-                    outputRange: [1.2, 1.0, 1.5],
-                    extrapolate: 'clamp',
-                    easing: Easing.elastic(1.0),
                   }),
                 },
               ],

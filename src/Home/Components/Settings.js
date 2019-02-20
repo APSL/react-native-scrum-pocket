@@ -3,14 +3,13 @@
 import React from 'react';
 import {
   ScrollView,
-  Switch,
   PixelRatio,
   StyleSheet,
   Modal,
   AsyncStorage,
   View,
 } from 'react-native';
-import { List } from 'react-native-paper';
+import { List, Switch } from 'react-native-paper';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import KeepAwake from 'react-native-keep-awake';
 import VersionNumber from 'react-native-version-number';
@@ -40,15 +39,26 @@ class Settings extends React.PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    // TODO: Refactor?
     AsyncStorage.multiGet(['screenState', 'vibrate']).then(
       (v: Array<Array<string>>) => {
-        this.setState({
-          isKeepScreenOn: v[0][1] === 'on',
-          vibrate: v[1][1] === 'on',
-        });
+        this.setState(
+          {
+            isKeepScreenOn: v[0][1] === 'on',
+            vibrate: v[1][1] === 'on',
+          },
+          () => {
+            this.handleScreenChange(this.state.isKeepScreenOn);
+          },
+        );
       },
     );
+  }
+
+  handleScreenChange(isScreenOn: boolean) {
+    if (isScreenOn) {
+      return KeepAwake.activate();
+    }
+    return KeepAwake.deactivate();
   }
 
   _onRequestClose = () => {
@@ -76,10 +86,7 @@ class Settings extends React.PureComponent<Props, State> {
           'screenState',
           isKeepScreenOn === false ? 'off' : 'on',
         );
-        if (this.state.isKeepScreenOn) {
-          return KeepAwake.activate();
-        }
-        return KeepAwake.deactivate();
+        this.handleScreenChange(this.state.isKeepScreenOn);
       },
     );
   };
@@ -137,12 +144,9 @@ class Settings extends React.PureComponent<Props, State> {
             onPress={this._onChange}
             right={() => (
               <Switch
+                color={Colors.Yellow600}
                 onValueChange={this._onChange}
                 style={styles.switch}
-                trackColor={{
-                  false: Colors.White,
-                  true: Colors.Yellow600,
-                }}
                 value={this.state.vibrate}
               />
             )}
@@ -155,18 +159,16 @@ class Settings extends React.PureComponent<Props, State> {
             onPress={this._onChangeScreenState}
             right={() => (
               <Switch
+                color={Colors.Yellow600}
                 onValueChange={this._onChangeScreenState}
                 style={styles.switch}
-                trackColor={{
-                  false: Colors.White,
-                  true: Colors.Yellow600,
-                }}
                 value={this.state.isKeepScreenOn}
               />
             )}
             title="Keep screen on"
           />
           <List.Item
+            description="Details about the game"
             left={props => (
               <View style={styles.icon}>
                 <MaterialCommunity {...props} name="cards" size={24} />
