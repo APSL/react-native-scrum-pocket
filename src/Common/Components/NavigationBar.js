@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Colors from '../Colors';
 import SafeView from './SafeView';
@@ -24,7 +24,14 @@ const NavigationBar = (props: Props) => (
 const styles = StyleSheet.create({
   container: {
     flex: 0,
-    zIndex: 1,
+    ...Platform.select({
+      ios: {
+        zIndex: 1,
+      },
+      android: {
+        height: 56,
+      },
+    }),
   },
   button: {
     position: 'absolute',

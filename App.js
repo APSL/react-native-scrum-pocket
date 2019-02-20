@@ -35,7 +35,7 @@ class App extends React.PureComponent<*, State> {
   _onPressCard = () => {
     AsyncStorage.getItem('vibrate').then((v: string) => {
       if (v === 'on') {
-        Vibration.vibrate(400, false);
+        Vibration.vibrate(200, false);
       }
     });
     this.setState((prev: State) => ({
@@ -74,6 +74,14 @@ class App extends React.PureComponent<*, State> {
             AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
               this.setState({
                 deck: newItems.length === 0 ? Deck.Standard : newItems,
+              });
+            });
+          },
+          eraseAll: () => {
+            // Erase all content and set Standard Deck by default
+            AsyncStorage.setItem('deck', JSON.stringify([])).then(() => {
+              this.setState({
+                deck: [],
               });
             });
           },

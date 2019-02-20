@@ -9,6 +9,7 @@ export type SettingsType = {
 export type ActionsType = {
   addItem: (item: string) => void,
   removeItem: (item: string) => void,
+  eraseAll: () => void,
 };
 
 export const { Provider, Consumer } = React.createContext({
@@ -18,4 +19,5 @@ export const { Provider, Consumer } = React.createContext({
   },
   addItem: () => {},
   removeItem: () => {},
+  eraseAll: () => {},
 });

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, IconButton, TextInput } from 'react-native-paper';
 import SafeView from '../../Common/Components/SafeView';
 import Colors from '../../Common/Colors';
 import Card from '../../Common/Components/Card';
@@ -14,6 +14,7 @@ type Props = {
   onClose: () => void,
   addItem: (item: string) => void,
   removeItem: (item: string) => void,
+  onPressRemove: () => void,
 };
 type State = {
   text: string,
@@ -80,7 +81,7 @@ class Sequence extends React.PureComponent<Props, State> {
           mode="outlined"
           onChangeText={this._onChange}
           placeholder="Type a symbol..."
-          style={styles.button}
+          style={styles.input}
           underlineColor={Colors.White}
           value={text}
         />
@@ -99,6 +100,13 @@ class Sequence extends React.PureComponent<Props, State> {
           data={this.props.items}
           keyExtractor={this._getKeyExtractor}
           ListEmptyComponent={<EmptyListComponent />}
+          ListHeaderComponent={
+            <IconButton
+              disabled={!this.props.items.length}
+              icon="delete-forever"
+              onPress={this.props.onPressRemove}
+            />
+          }
           numColumns={3}
           renderItem={this._renderItem}
         />
@@ -110,10 +118,15 @@ class Sequence extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
-    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    marginTop: 50,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 20,
   },
   button: {
-    marginTop: 50,
     marginLeft: 20,
     marginRight: 20,
   },

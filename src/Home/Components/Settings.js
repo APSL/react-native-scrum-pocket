@@ -96,6 +96,10 @@ class Settings extends React.PureComponent<Props, State> {
     );
   };
 
+  _onRemove = () => {
+    this.props.actions.eraseAll();
+  };
+
   render() {
     return (
       <ScrollView
@@ -124,6 +128,7 @@ class Settings extends React.PureComponent<Props, State> {
               addItem={this._addItem}
               items={this.props.settings.deck}
               onClose={this._onRequestClose}
+              onPressRemove={this._onRemove}
               removeItem={this._removeItem}
             />
           </Modal>
