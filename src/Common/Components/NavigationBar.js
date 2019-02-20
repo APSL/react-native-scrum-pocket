@@ -12,9 +12,9 @@ type Props = {
 const NavigationBar = (props: Props) => (
   <View style={styles.container}>
     <IconButton
+      color={Colors.White}
       icon="close"
       onPress={props.onPress}
-      color={Colors.White}
       style={styles.button}
     />
   </View>

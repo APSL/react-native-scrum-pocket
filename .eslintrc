@@ -21,6 +21,17 @@
         "tabWidth": 2
       }
     ],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": false,
+        "shorthandFirst": false,
+        "shorthandLast": false,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "reservedFirst": true
+      }
+    ],
     "react/destructuring-assignment": 0,
     "global-require": "off",
     "operator-linebreak": "off",

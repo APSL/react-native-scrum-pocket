@@ -45,7 +45,6 @@ class Sequence extends React.PureComponent<Props, State> {
   _renderItem = (item: { item: string }) => (
     <Card
       key={`i-${item.item}`}
-      title={item.item}
       onPress={() => {
         Alert.alert(
           'Do you want to remove the card?',
@@ -64,6 +63,7 @@ class Sequence extends React.PureComponent<Props, State> {
           ],
         );
       }}
+      title={item.item}
     />
   );
 
@@ -76,31 +76,31 @@ class Sequence extends React.PureComponent<Props, State> {
           ref={(ref: any) => {
             this.textInput = ref;
           }}
+          maxLength={3}
+          mode="outlined"
+          onChangeText={this._onChange}
           placeholder="Type a symbol..."
           style={styles.button}
-          value={text}
-          onChangeText={this._onChange}
-          mode="outlined"
           underlineColor={Colors.White}
-          maxLength={3}
+          value={text}
         />
         <Button
-          style={styles.button}
-          mode="contained"
+          color={Colors.Yellow600}
           dark
           disabled={!text.length}
-          color={Colors.Yellow600}
+          icon="add"
+          mode="contained"
           onPress={this._onAdd}
-          icon="add">
+          style={styles.button}>
           Add
         </Button>
         <FlatList
           contentContainerStyle={styles.contentContainerStyle}
-          numColumns={3}
           data={this.props.items}
           keyExtractor={this._getKeyExtractor}
-          renderItem={this._renderItem}
           ListEmptyComponent={<EmptyListComponent />}
+          numColumns={3}
+          renderItem={this._renderItem}
         />
       </SafeView>
     );

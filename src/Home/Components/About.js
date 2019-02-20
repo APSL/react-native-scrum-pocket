@@ -38,11 +38,9 @@ class About extends React.PureComponent<Props> {
       <SafeView>
         <NavigationBar onPress={this.props.onClose} />
         <ScrollView
-          style={styles.container}
           contentContainerStyle={{
             paddingBottom: 40,
           }}
-          scrollEventThrottle={12}
           onScroll={Animated.event([
             {
               nativeEvent: {
@@ -51,7 +49,9 @@ class About extends React.PureComponent<Props> {
                 },
               },
             },
-          ])}>
+          ])}
+          scrollEventThrottle={12}
+          style={styles.container}>
           <View style={styles.contentContainer}>
             <Animated.Image
               source={apslLogo}
@@ -90,21 +90,21 @@ class About extends React.PureComponent<Props> {
             </View>
             <View style={styles.textContainer}>
               <Button
-                mode="contained"
-                dark
                 color={Colors.Yellow600}
+                dark
+                mode="contained"
                 onPress={this._openSite}>
                 Get in touch
               </Button>
             </View>
           </View>
           <List.Accordion
-            title="About Scrum Poker"
             left={props => (
               <View style={styles.icon}>
-                <MaterialCommunity {...props} size={24} name="cards" />
+                <MaterialCommunity {...props} name="cards" size={24} />
               </View>
-            )}>
+            )}
+            title="About Scrum Poker">
             <Text>
               Planning poker, also called Scrum poker, is a consensus-based,
               gamified technique for estimating, mostly used to estimate effort or

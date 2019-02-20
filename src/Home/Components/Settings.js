@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {
-  View,
   ScrollView,
   Switch,
   PixelRatio,
@@ -10,7 +9,7 @@ import {
   Modal,
   AsyncStorage,
 } from 'react-native';
-import { List, Text } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import KeepAwake from 'react-native-keep-awake';
 import VersionNumber from 'react-native-version-number';
 import withSettings from '../../Common/withSettings';
@@ -49,7 +48,7 @@ class Settings extends React.PureComponent<Props, State> {
     );
   }
 
-  onClose = () => {
+  _onRequestClose = () => {
     this.setState({
       screen: 'none',
     });
@@ -64,13 +63,16 @@ class Settings extends React.PureComponent<Props, State> {
   };
 
   _onChangeScreenState = () => {
-    const { isKeepScreenOn } = this.state;
     this.setState(
       (prev: State) => ({
         isKeepScreenOn: !prev.isKeepScreenOn,
       }),
       () => {
-        AsyncStorage.setItem('screenState', isKeepScreenOn === true ? 'off' : 'on');
+        const { isKeepScreenOn } = this.state;
+        AsyncStorage.setItem(
+          'screenState',
+          isKeepScreenOn === false ? 'off' : 'on',
+        );
         if (this.state.isKeepScreenOn) {
           return KeepAwake.activate();
         }
@@ -80,13 +82,13 @@ class Settings extends React.PureComponent<Props, State> {
   };
 
   _onChange = () => {
-    const { vibrate } = this.state;
     this.setState(
       (prev: State) => ({
         vibrate: !prev.vibrate,
       }),
       () => {
-        AsyncStorage.setItem('vibrate', vibrate === true ? 'off' : 'on');
+        const { vibrate } = this.state;
+        AsyncStorage.setItem('vibrate', vibrate === true ? 'on' : 'off');
       },
     );
   };
@@ -99,86 +101,84 @@ class Settings extends React.PureComponent<Props, State> {
         }}>
         <List.Section title="DECK SETTINGS">
           <List.Item
-            title="Custom sequence"
             description="Use a custom sequence instead Standard"
             left={props => <List.Icon {...props} icon="dashboard" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
             onPress={() => {
               this.setState({
                 screen: 'sequence',
               });
             }}
+            right={props => <List.Icon {...props} icon="chevron-right" />}
             style={styles.item}
+            title="Custom sequence"
           />
           <Modal
-            visible={this.state.screen === 'sequence'}
             animated
-            animationType="slide">
+            animationType="slide"
+            onRequestClose={this._onRequestClose}
+            visible={this.state.screen === 'sequence'}>
             <Sequence
-              items={this.props.settings.deck}
-              onClose={this.onClose}
               addItem={this._addItem}
+              items={this.props.settings.deck}
+              onClose={this._onRequestClose}
               removeItem={this._removeItem}
             />
           </Modal>
         </List.Section>
         <List.Section title="GENERAL SETTINGS">
           <List.Item
-            title="Vibration"
             description="Use vibration when rotating a card"
             left={props => <List.Icon {...props} icon="vibration" />}
             onPress={this._onChange}
             right={() => (
               <Switch
                 onValueChange={this._onChange}
-                value={this.state.vibrate}
-                style={{
-                  top: 18,
-                }}
+                style={styles.switch}
                 trackColor={{
                   false: Colors.White,
                   true: Colors.Yellow600,
                 }}
+                value={this.state.vibrate}
               />
             )}
             style={styles.item}
+            title="Vibration"
           />
           <List.Item
-            title="Keep screen on"
             description="Prevents automatic display shutdown"
-            onPress={this._onChangeScreenState}
             left={props => <List.Icon {...props} icon="phone-android" />}
+            onPress={this._onChangeScreenState}
             right={() => (
               <Switch
-                value={this.state.isKeepScreenOn}
                 onValueChange={this._onChangeScreenState}
-                style={{
-                  top: 18,
-                }}
+                style={styles.switch}
                 trackColor={{
                   false: Colors.White,
                   true: Colors.Yellow600,
                 }}
+                value={this.state.isKeepScreenOn}
               />
             )}
+            title="Keep screen on"
           />
           <List.Item
-            title="About"
             description={`Version ${VersionNumber.appVersion} (${
               VersionNumber.buildVersion
             })`}
+            left={props => <List.Icon {...props} icon="info" />}
             onPress={() => {
               this.setState({
                 screen: 'about',
               });
             }}
-            left={props => <List.Icon {...props} icon="info" />}
+            title="About"
           />
           <Modal
-            visible={this.state.screen === 'about'}
             animated
-            animationType="slide">
-            <About onClose={this.onClose} />
+            animationType="slide"
+            onRequestClose={this._onRequestClose}
+            visible={this.state.screen === 'about'}>
+            <About onClose={this._onRequestClose} />
           </Modal>
         </List.Section>
       </ScrollView>
@@ -198,6 +198,9 @@ const styles = StyleSheet.create({
   bottom: {
     alignItems: 'center',
     padding: 10,
+  },
+  switch: {
+    alignSelf: 'center',
   },
 });
 

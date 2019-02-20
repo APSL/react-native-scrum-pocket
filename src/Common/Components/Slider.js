@@ -81,18 +81,18 @@ class Slider extends React.PureComponent<Props, State> {
       <>
         <Header
           hiddenAnimation={this._toggleHeader}
-          scroll={this._animated}
-          pages={this.props.pages}
           onPress={this._onPressPage}
+          pages={this.props.pages}
+          scroll={this._animated}
         />
         <Animated.ScrollView
           ref={this._scrollView}
-          onLayout={this._setDimensions}
+          contentOffset={{
+            x: this.state.width * this.props.initialPage,
+            y: 0,
+          }}
           horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          scrollEnabled={!this.props.hidden}
+          onLayout={this._setDimensions}
           onScroll={Animated.event(
             [
               {
@@ -107,10 +107,10 @@ class Slider extends React.PureComponent<Props, State> {
               listener: this._onScroll,
             },
           )}
-          contentOffset={{
-            x: this.state.width * this.props.initialPage,
-            y: 0,
-          }}>
+          pagingEnabled
+          scrollEnabled={!this.props.hidden}
+          scrollEventThrottle={16}
+          showsHorizontalScrollIndicator={false}>
           {this.props.items(this.state.page, this._animated)}
         </Animated.ScrollView>
       </>

@@ -64,7 +64,7 @@ class CardStack extends React.PureComponent<Props, State> {
   };
 
   _renderItem = (item: { item: string, idx: number }) => (
-    <Card title={item.item} onPress={this._onPressCard} />
+    <Card onPress={this._onPressCard} title={item.item} />
   );
 
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
@@ -89,31 +89,31 @@ class CardStack extends React.PureComponent<Props, State> {
             },
           ]}>
           <Card
-            title={card}
             onPress={this._onPressCard}
-            titleStyle={{
-              fontSize: 120,
-            }}
             style={{
               width: width - 80,
               height: 340,
               margin: 0,
               borderWidth: 4,
             }}
+            title={card}
+            titleStyle={{
+              fontSize: 120,
+            }}
           />
         </Animated.View>
         <Animated.FlatList
+          contentContainerStyle={styles.contentContainerStyle}
+          data={this.props.deck}
+          keyExtractor={this._getKeyExtractor}
+          numColumns={3}
+          renderItem={this._renderItem}
           style={[
             {
               zIndex,
               opacity: this._opacity,
             },
           ]}
-          contentContainerStyle={styles.contentContainerStyle}
-          numColumns={3}
-          data={this.props.deck}
-          keyExtractor={this._getKeyExtractor}
-          renderItem={this._renderItem}
         />
       </>
     );

@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const EmptyListComponent = () => (
   <View style={styles.container}>
-    <Icon name="mood-bad" size={110} color={Colors.grey300} />
+    <Icon color={Colors.grey300} name="mood-bad" size={110} />
     <Headline style={styles.headline}>
       Oops! The list is empty! You can <Text style={styles.text}>+</Text> a new card
       at the top of the list
