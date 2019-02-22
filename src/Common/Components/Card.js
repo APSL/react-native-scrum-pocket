@@ -30,12 +30,19 @@ class Card extends React.PureComponent<Props> {
     this.props.onPress(this.props.title);
   };
 
+  _renderTitle() {
+    const { titleStyle, title } = this.props;
+    if (!title.startsWith('#')) {
+      return <Text style={[styles.number, titleStyle]}>{title}</Text>;
+    }
+    return null;
+  }
+
   render() {
-    const { style, titleStyle, title } = this.props;
+    const { style, title } = this.props;
     return (
       <AnimatedTouchableRipple
         onPress={this._onPress}
-        underlayColor={Colors.SemiYellow600}
         style={[
           styles.card,
           style,
@@ -52,12 +59,9 @@ class Card extends React.PureComponent<Props> {
               },
             ],
           },
-        ]}>
-        <>
-          {!title.startsWith('#') && (
-            <Text style={[styles.number, titleStyle]}>{title}</Text>
-          )}
-        </>
+        ]}
+        underlayColor={Colors.SemiYellow600}>
+        <>{this._renderTitle()}</>
       </AnimatedTouchableRipple>
     );
   }

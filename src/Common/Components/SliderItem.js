@@ -23,8 +23,7 @@ const SliderItem = (props: Props) => {
             extrapolate: 'clamp',
           }),
         },
-      ]}
-      horizontal={false}>
+      ]}>
       {props.children}
     </Animated.View>
   );

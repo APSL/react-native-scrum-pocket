@@ -3,11 +3,10 @@
   "extends": "airbnb",
   "plugins": ["react", "flowtype", "jsx-a11y", "import", "prettier"],
   "globals": {
+    "JSX": true,
     "Generator": true,
-    "FormData": true,
     "navigator": true,
-    "React$ComponentType": true,
-    "window": true
+    "React$ComponentType": true
   },
   "rules": {
     "prettier/prettier": [
@@ -20,6 +19,17 @@
         "semi": true,
         "useTabs": false,
         "tabWidth": 2
+      }
+    ],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": false,
+        "shorthandFirst": false,
+        "shorthandLast": false,
+        "ignoreCase": true,
+        "noSortAlphabetically": false,
+        "reservedFirst": true
       }
     ],
     "react/destructuring-assignment": 0,
