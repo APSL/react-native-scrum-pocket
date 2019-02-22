@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'AvenirNextCondensed-Regular',
-    padding: 10,
+    padding: 5,
     ...Platform.select({
       android: {
-        fontFamily: 'Roboto',
-        fontSize: 13,
+        fontFamily: 'sans-serif-condensed',
+        fontSize: 14,
       },
     }),
   },
