@@ -38,18 +38,15 @@ class Settings extends React.PureComponent<Props, State> {
     vibrate: false,
   };
 
-  componentDidMount() {
-    AsyncStorage.multiGet(['screenState', 'vibrate']).then(
-      (v: Array<Array<string>>) => {
-        this.setState(
-          {
-            isKeepScreenOn: v[0][1] === 'on',
-            vibrate: v[1][1] === 'on',
-          },
-          () => {
-            this.handleScreenChange(this.state.isKeepScreenOn);
-          },
-        );
+  async componentDidMount() {
+    const storage = await AsyncStorage.multiGet(['screenState', 'vibrate']);
+    this.setState(
+      {
+        isKeepScreenOn: storage[0][1] === 'on',
+        vibrate: storage[1][1] === 'on',
+      },
+      () => {
+        this.handleScreenChange(this.state.isKeepScreenOn);
       },
     );
   }
@@ -168,7 +165,7 @@ class Settings extends React.PureComponent<Props, State> {
             title="Keep screen on"
           />
           <List.Item
-            description="Details about the game"
+            description="Read more"
             left={props => (
               <View style={styles.icon}>
                 <MaterialCommunity {...props} name="cards" size={24} />
@@ -179,7 +176,7 @@ class Settings extends React.PureComponent<Props, State> {
                 screen: 'planning',
               });
             }}
-            title="About Scrum Poker"
+            title="What is Scrum Poker?"
           />
           <Modal
             animated

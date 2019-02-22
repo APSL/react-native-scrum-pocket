@@ -21,11 +21,13 @@ type State = {
 };
 
 class Sequence extends React.PureComponent<Props, State> {
-  textInput: TextInput;
-
-  state = {
-    text: '',
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+    this.textInputRef = React.createRef();
+  }
 
   _onChange = (text: string) => {
     this.setState({
@@ -35,10 +37,15 @@ class Sequence extends React.PureComponent<Props, State> {
 
   _onAdd = () => {
     const { text } = this.state;
-    return this.setState({ text: '' }, () => {
-      this.textInput.clear();
-      this.props.addItem(text);
-    });
+    this.setState(
+      {
+        text: '',
+      },
+      () => {
+        this.textInputRef.current.clear();
+        this.props.addItem(text);
+      },
+    );
   };
 
   _getKeyExtractor = (item: string, idx: number) => `card-${idx}`;
@@ -47,22 +54,18 @@ class Sequence extends React.PureComponent<Props, State> {
     <Card
       key={`i-${item.item}`}
       onPress={() => {
-        Alert.alert(
-          'Do you want to remove the card?',
-          'This action cannot be undone',
-          [
-            {
-              text: 'Cancel',
+        Alert.alert('Do you want to remove the card?', '', [
+          {
+            text: 'Cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              this.props.removeItem(item.item);
             },
-            {
-              text: 'OK',
-              onPress: () => {
-                this.props.removeItem(item.item);
-              },
-              style: 'destructive',
-            },
-          ],
-        );
+            style: 'destructive',
+          },
+        ]);
       }}
       title={item.item}
     />
@@ -74,9 +77,7 @@ class Sequence extends React.PureComponent<Props, State> {
       <SafeView>
         <NavigationBar onPress={this.props.onClose} />
         <TextInput
-          ref={(ref: any) => {
-            this.textInput = ref;
-          }}
+          ref={this.textInputRef}
           maxLength={3}
           mode="outlined"
           onChangeText={this._onChange}

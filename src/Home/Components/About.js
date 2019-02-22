@@ -9,8 +9,9 @@ import {
   Dimensions,
   Easing,
   Linking,
+  Platform,
 } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Headline, Text } from 'react-native-paper';
 import Colors from '../../Common/Colors';
 import SafeView from '../../Common/Components/SafeView';
 import NavigationBar from '../../Common/Components/NavigationBar';
@@ -80,13 +81,13 @@ class About extends React.PureComponent<Props> {
               ]}
             />
             <View style={styles.textContainer}>
-              <Text style={styles.text}>
+              <Headline style={styles.text}>
                 Made with ❤️ by the Mobile Team at APSL.net with{' '}
-                <Text style={styles.mono}>
+                <Headline style={styles.mono}>
                   React Native, react-native-paper, react-native-vector-icons,
                   react-native-keep-awake & react-native-version-number
-                </Text>
-              </Text>
+                </Headline>
+              </Headline>
             </View>
             <View style={styles.textContainer}>
               <Button
@@ -110,9 +111,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     alignItems: 'center',
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 20,
     paddingTop: 40,
   },
   textContainer: {
@@ -121,9 +120,15 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.White,
     textAlign: 'center',
+    lineHeight: 28,
+    fontSize: Platform.select({
+      ios: 14,
+      android: 16,
+    }),
   },
   mono: {
     fontWeight: '700',
+    fontSize: 14,
   },
 });
 

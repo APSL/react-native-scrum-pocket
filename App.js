@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Animated, StatusBar, AsyncStorage, Vibration } from 'react-native';
+import { Animated, StatusBar, AsyncStorage, Vibration, Alert } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from './src/Context';
 import SafeView from './src/Common/Components/SafeView';
@@ -23,28 +23,31 @@ class App extends React.PureComponent<*, State> {
     deck: [],
   };
 
-  componentDidMount() {
-    AsyncStorage.getItem('deck').then((deck: string) => {
-      const items = JSON.parse(deck);
-      if (items && items.length) {
-        this.setState({ deck: items });
-      }
-    });
+  async componentDidMount() {
+    const items = JSON.parse(await AsyncStorage.getItem('deck'));
+    if (items && items.length) {
+      this.setState({
+        deck: items,
+      });
+    }
   }
 
-  _onPressCard = () => {
-    AsyncStorage.getItem('vibrate').then((v: string) => {
-      if (v === 'on') {
-        Vibration.vibrate(200, false);
-      }
-    });
-    this.setState((prev: State) => ({
-      hidden: !prev.hidden,
-    }));
+  _onPressCard = async () => {
+    const vibrate = await AsyncStorage.getItem('vibrate');
+    this.setState(
+      (prev: State) => ({
+        hidden: !prev.hidden,
+      }),
+      () => {
+        if (vibrate === 'on') {
+          Vibration.vibrate(200, false);
+        }
+      },
+    );
   };
 
   /**
-   * Function to get deck type
+   * Function to get deck type at first render
    */
   getDeck(): Array<string> {
     if (this.state.deck === Deck.Standard) {
@@ -53,6 +56,54 @@ class App extends React.PureComponent<*, State> {
     return this.state.deck;
   }
 
+  _onAddItem = (item: string) => {
+    if (this.state.deck.includes(item)) {
+      return Alert.alert(
+        'The symbol you are trying to enter is already in the list',
+      );
+    }
+    return this.setState(
+      (prev: State) => ({
+        // Add the new item to the previous array
+        deck: [...prev.deck, item],
+      }),
+      async () => {
+        await AsyncStorage.setItem('deck', JSON.stringify(this.state.deck));
+      },
+    );
+  };
+
+  _onRemoveItem = (item: string) => {
+    const newItems = this.state.deck.filter((v: string) => v !== item);
+    this.setState(
+      () => {
+        if (newItems.length === 0) {
+          return {
+            deck: Deck.Standard,
+          };
+        }
+        return {
+          deck: newItems,
+        };
+      },
+      async () => {
+        await AsyncStorage.setItem('deck', JSON.stringify(newItems));
+      },
+    );
+  };
+
+  _onRemoveAll = () => {
+    this.setState(
+      {
+        deck: [],
+      },
+      async () => {
+        // Erase all content and set Standard Deck by default
+        await AsyncStorage.setItem('deck', JSON.stringify([]));
+      },
+    );
+  };
+
   render() {
     return (
       <Provider
@@ -60,31 +111,9 @@ class App extends React.PureComponent<*, State> {
           settings: {
             deck: this.getDeck(),
           },
-          addItem: (item: string) => {
-            // Set newItems with state and new item incoming
-            const newItems = [...this.state.deck, item];
-            AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
-              this.setState({
-                deck: newItems,
-              });
-            });
-          },
-          removeItem: (item: string) => {
-            const newItems = this.state.deck.filter((v: string) => v !== item);
-            AsyncStorage.setItem('deck', JSON.stringify(newItems)).then(() => {
-              this.setState({
-                deck: newItems.length === 0 ? Deck.Standard : newItems,
-              });
-            });
-          },
-          eraseAll: () => {
-            // Erase all content and set Standard Deck by default
-            AsyncStorage.setItem('deck', JSON.stringify([])).then(() => {
-              this.setState({
-                deck: [],
-              });
-            });
-          },
+          addItem: this._onAddItem,
+          removeItem: this._onRemoveItem,
+          eraseAll: this._onRemoveAll,
         }}>
         <PaperProvider theme={Theme}>
           <SafeView>
